@@ -1,26 +1,455 @@
 @import "tailwindcss";
 
+/* ==========================================================
+   Runtime color tokens — per-section intentional mode.
+   :root = light (the primary/default register, matching kota.co.uk's
+   white-paper/black-ink base). Any element can flip to the dark
+   register by carrying data-mode="dark"; a nested data-mode="light"
+   flips back.
+   ========================================================== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --velova-bg: #f7f5f0;
+  --velova-surface: #f1efe8;
+  --velova-text: #0a0a0a;
+  --velova-text-2: #68666e;
+  --velova-accent: #6d3ce0;
+  --velova-accent-text: #5c2fc4;
+  --velova-accent-dim: #4a2499;
+  --velova-signal: #1f9d5c;
+  --velova-border: #e6e4ea;
+  --velova-error: #c0392b;
+  --velova-shine: #e4d9ff;
+  --velova-on-brand: #ffffff;
+  --velova-gradient: linear-gradient(90deg, #633cc9, #3b8392, #cb24cc);
+  --velova-gradient-alt: linear-gradient(135deg, #6c3ce1, #ff34f3);
+}
+
+[data-mode="light"] {
+  --velova-bg: #f7f5f0;
+  --velova-surface: #f1efe8;
+  --velova-text: #0a0a0a;
+  --velova-text-2: #68666e;
+  --velova-accent: #6d3ce0;
+  --velova-accent-text: #5c2fc4;
+  --velova-accent-dim: #4a2499;
+  --velova-signal: #1f9d5c;
+  --velova-border: #e6e4ea;
+  --velova-error: #c0392b;
+  --velova-shine: #e4d9ff;
+  --velova-on-brand: #ffffff;
+}
+
+[data-mode="dark"] {
+  --velova-bg: #0a0a0b;
+  --velova-surface: #151517;
+  --velova-text: #f5f4f7;
+  --velova-text-2: #9c9aa3;
+  --velova-accent: #8a5cf0;
+  --velova-accent-text: #b79bff;
+  --velova-accent-dim: #6d3ce0;
+  --velova-signal: #34c17e;
+  --velova-border: #26252a;
+  --velova-error: #e2604c;
+  --velova-shine: #2c2140;
+  --velova-on-brand: #ffffff;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--velova-bg);
+  --color-surface: var(--velova-surface);
+  --color-text: var(--velova-text);
+  --color-text-2: var(--velova-text-2);
+  --color-accent: var(--velova-accent);
+  --color-accent-text: var(--velova-accent-text);
+  --color-accent-dim: var(--velova-accent-dim);
+  --color-signal: var(--velova-signal);
+  --color-border: var(--velova-border);
+  --color-error: var(--velova-error);
+  --color-shine: var(--velova-shine);
+  --color-on-brand: var(--velova-on-brand);
+
+  --font-display: var(--font-syne), "Syne", system-ui, sans-serif;
+  --font-sans: var(--font-general-sans), system-ui, sans-serif;
+  --font-mono: var(--font-general-sans), system-ui, sans-serif;
+
+  /* Fluid type scale — modeled on kota.co.uk's clamp() steps (--fs-100
+     down to --fs-24), with the giant uppercase section-heading step
+     (--text-giant) added for the "WORK / SERVICES / RESULTS" treatment. */
+  --text-giant: clamp(2.75rem, 8vw, 7rem);
+  --text-display: clamp(2.75rem, 4vw + 1.5rem, 6rem);
+  --text-h1: clamp(2.25rem, 3vw + 1.4rem, 4.5rem);
+  --text-h2: clamp(1.75rem, 2vw + 1.2rem, 3rem);
+  --text-h3: clamp(1.375rem, 1vw + 1.1rem, 2rem);
+  --text-h4: clamp(1.125rem, 0.4vw + 1rem, 1.375rem);
+  --text-body-lg: clamp(1.0625rem, 0.2vw + 1rem, 1.1875rem);
+  --text-body: clamp(0.9375rem, 0.15vw + 0.9rem, 1rem);
+  --text-caption: clamp(0.8125rem, 0.1vw + 0.78rem, 0.875rem);
+  --text-small: clamp(0.75rem, 0.1vw + 0.72rem, 0.8125rem);
+  --text-data: clamp(0.875rem, 0.2vw + 0.82rem, 1.125rem);
+  --text-eyebrow: clamp(0.75rem, 0.05vw + 0.73rem, 0.8125rem);
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-pill: 9999px;
+
+  /* kota.co.uk's real production easing tokens (extracted from its
+     --animation-* custom properties) plus its pop/bounce curve. */
+  --ease-standard: cubic-bezier(0.75, 0, 0.25, 1);
+  --ease-entrance: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-magnetic: cubic-bezier(0.2, 0.9, 0.2, 1);
+  --ease-navigation: cubic-bezier(0.8, 0, 0.1, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ==========================================================
+   Base
+   ========================================================== */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: auto; /* Lenis owns smooth scroll; native smooth-scroll would fight it */
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.65;
+    transition: background-color 0.4s var(--ease-standard), color 0.4s var(--ease-standard);
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: #fff;
+  }
+
+  h1, h2, h3, h4, p {
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  img, svg, video {
+    display: block;
+    max-width: 100%;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Typographic building blocks used across the component library */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--text-eyebrow);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-accent-text);
+}
+
+.text-data {
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Kota-style giant uppercase section heading ("WORK", "SERVICES",
+   "RESULTS"...) — huge scale, near-0 tracking pulled tight, ~0.9 leading. */
+.heading-giant {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-weight: 600;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  font-size: var(--text-giant);
+}
+
+/* Thin, gray variant of the giant heading — kota.co.uk's "OUR SERVICES"
+   treatment sits lighter/quieter than its bold black section titles. */
+.heading-giant--thin {
+  font-weight: 500;
+  color: var(--color-text-2);
+}
+
+/* Kota-style lowercase hero headline treatment. */
+.heading-hero {
+  font-family: var(--font-display);
+  text-transform: lowercase;
+  letter-spacing: -0.01em;
+}
+
+/* One-corner-blown-out radius — Kota's signature card/image shape:
+   three sharp corners, one large rounded one. */
+.corner-card {
+  border-radius: 10px 100px 10px 10px;
+}
+.corner-card-lg {
+  border-radius: 20px 160px 20px 20px;
+}
+
+/* ==========================================================
+   Gradient accent — reserved for the hero highlight word and other
+   single-word emphasis moments. Do not apply as a general text color.
+   ========================================================== */
+.text-shine {
+  background-image: var(--velova-gradient);
+  background-size: 200% 100%;
+  background-position: 0% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: sweep 2.6s var(--ease-standard) 0.4s 1 both;
+}
+@keyframes sweep {
+  from { background-position: 100% 0; }
+  to { background-position: 0% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .text-shine {
+    animation: none;
+    background-position: 0 0;
+  }
+}
+
+/* ==========================================================
+   Button system devices
+   ========================================================== */
+.btn-ghost-underline {
+  position: relative;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+.btn-ghost-underline::after {
+  content: "";
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  bottom: 4px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.28s var(--ease-standard);
+}
+.btn-ghost-underline:hover::after {
+  transform: scaleX(1);
+}
+
+.btn-loading-dots {
+  letter-spacing: 2px;
+  animation: btnPulse 1s ease-in-out infinite;
+}
+@keyframes btnPulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+/* ==========================================================
+   Gradient mesh background — kota.co.uk's soft drifting blob
+   backdrop for light sections (hero, pillars, services, framework).
+   ========================================================== */
+.gradient-mesh {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  animation: meshHue 18s ease-in-out infinite alternate;
+}
+@keyframes meshHue {
+  from { filter: hue-rotate(0deg); }
+  to { filter: hue-rotate(18deg); }
+}
+.gradient-mesh__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.78;
+  will-change: transform;
+}
+.gradient-mesh__blob--a {
+  width: 58vw;
+  height: 58vw;
+  max-width: 860px;
+  max-height: 860px;
+  top: -20%;
+  left: -10%;
+  background: radial-gradient(circle, #f6ead5 0%, transparent 70%);
+  animation: meshDriftA 24s ease-in-out infinite alternate;
+}
+.gradient-mesh__blob--b {
+  width: 56vw;
+  height: 56vw;
+  max-width: 820px;
+  max-height: 820px;
+  top: -5%;
+  right: -14%;
+  background: radial-gradient(circle, #6cbfe6 0%, transparent 70%);
+  animation: meshDriftB 28s ease-in-out infinite alternate;
+}
+.gradient-mesh__blob--c {
+  width: 52vw;
+  height: 52vw;
+  max-width: 760px;
+  max-height: 760px;
+  bottom: -25%;
+  right: -4%;
+  background: radial-gradient(circle, #d648e0 0%, transparent 70%);
+  animation: meshDriftC 20s ease-in-out infinite alternate;
+}
+.gradient-mesh__blob--d {
+  width: 42vw;
+  height: 42vw;
+  max-width: 620px;
+  max-height: 620px;
+  bottom: -12%;
+  left: 8%;
+  background: radial-gradient(circle, #3b8392 0%, transparent 70%);
+  opacity: 0.4;
+  animation: meshDriftD 32s ease-in-out infinite alternate;
+}
+@keyframes meshDriftA {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(5%, 7%) scale(1.08); }
+}
+@keyframes meshDriftB {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(-7%, 5%) scale(0.94); }
+}
+@keyframes meshDriftC {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(-5%, -6%) scale(1.1); }
+}
+@keyframes meshDriftD {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(6%, -4%) scale(1.05); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gradient-mesh,
+  .gradient-mesh__blob {
+    animation: none;
+  }
+}
+/* ==========================================================
+   Grain overlay — subtle animated film-grain texture over the whole
+   viewport, matching kota.co.uk's off-white/textured paper feel.
+   ========================================================== */
+.grain-overlay {
+  position: fixed;
+  inset: -10%;
+  z-index: 9997;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  animation: grainShift 1s steps(6) infinite;
+}
+@keyframes grainShift {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-4%, 6%); }
+  40% { transform: translate(6%, -3%); }
+  60% { transform: translate(-3%, -6%); }
+  80% { transform: translate(4%, 4%); }
+  100% { transform: translate(0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .grain-overlay {
+    animation: none;
+  }
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes scrollcue {
+  0% { transform: translateY(-100%); }
+  50% { transform: translateY(0%); }
+  100% { transform: translateY(100%); }
+}
+
+/* ==========================================================
+   Custom cursor (pointer-fine only, see CursorProvider)
+   ========================================================== */
+.has-custom-cursor {
+  cursor: none;
+}
+
+.has-custom-cursor a,
+.has-custom-cursor button {
+  cursor: none;
+}
+
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+  transition: width 0.25s var(--ease-magnetic), height 0.25s var(--ease-magnetic), background-color 0.25s ease, opacity 0.2s ease;
+}
+
+.cursor-dot[data-state="hover"] {
+  width: 44px;
+  height: 44px;
+  background: color-mix(in srgb, var(--color-accent) 35%, transparent);
+  outline: 1px solid var(--color-accent);
+}
+
+.cursor-dot[data-state="hidden"] {
+  opacity: 0;
+}
+
+/* ==========================================================
+   Accessibility: hard gate on reduced motion. Individual GSAP
+   hooks also check this via useReducedMotion — this is the
+   CSS-level backstop for anything that isn't JS-driven.
+   ========================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
