@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { Play } from "lucide-react";
 import { useClipReveal } from "@/animations/hooks";
 import { cn } from "@/lib/utils/cn";
 
@@ -16,11 +17,13 @@ interface ImageRevealProps {
 }
 
 /**
- * clip-path wipe reveal wrapping next/image. No real client photography has
- * been supplied yet, so `src` is optional: omitting it renders a tasteful
- * abstract gradient placeholder (never a fabricated "photo") that should be
- * swapped for real editorial photography as it becomes available — the
- * reveal animation and layout are otherwise production-ready as-is.
+ * clip-path wipe reveal wrapping next/image. No real client photography or
+ * video has been supplied yet, so `src` is optional: omitting it renders an
+ * animated placeholder — a slow gradient sweep plus a pulsing play badge —
+ * that reads honestly as "video coming here" rather than a fabricated photo
+ * or a static color swatch. Swap for real footage/photography as it becomes
+ * available; the reveal animation and layout are otherwise production-ready
+ * as-is.
  */
 export function ImageReveal({
   src,
@@ -42,12 +45,14 @@ export function ImageReveal({
           role="img"
           aria-label={alt}
           className={cn(
-            "absolute inset-0",
-            placeholderVariant === "ember"
-              ? "bg-[linear-gradient(135deg,var(--color-accent-dim),var(--color-accent))]"
-              : "bg-[linear-gradient(135deg,var(--color-surface),var(--color-border))]",
+            "absolute inset-0 placeholder-video",
+            placeholderVariant === "ember" ? "placeholder-video--ember" : "placeholder-video--ink",
           )}
-        />
+        >
+          <span className="placeholder-video__badge" aria-hidden="true">
+            <Play fill="currentColor" strokeWidth={0} />
+          </span>
+        </div>
       )}
     </div>
   );

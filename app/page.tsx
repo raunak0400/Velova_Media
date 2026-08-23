@@ -8,6 +8,8 @@ import { Testimonials } from "@/components/sections/home/Testimonials";
 import { MarketsPreview } from "@/components/sections/home/MarketsPreview";
 import { ProcessTimeline } from "@/components/sections/home/ProcessTimeline";
 import { PlatformsStrip } from "@/components/sections/home/PlatformsStrip";
+import { LatestArticles } from "@/components/sections/home/LatestArticles";
+import { FAQSection } from "@/components/sections/home/FAQSection";
 import { CTASection } from "@/components/sections/CTASection";
 import { Marquee } from "@/components/motion/Marquee";
 import { SERVICES } from "@/data/services";
@@ -45,6 +47,8 @@ export default function Home() {
       <PlatformsStrip />
       <Testimonials />
       <MarketsPreview />
+      <LatestArticles />
+      <FAQSection />
       <Marquee items={SERVICES.map((s) => s.navLabel.toUpperCase())} />
       <CTASection heading={<>Ready to grow a brand that means <span className="text-shine">business</span>?</>} />
     </>

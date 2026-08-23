@@ -1,141 +1,120 @@
 import Link from "next/link";
-import { Instagram, Linkedin, MessageCircle } from "lucide-react";
-import { GradientMesh } from "@/components/motion/GradientMesh";
+import { ArrowUpRight } from "lucide-react";
+import { FooterGlow } from "@/components/motion/FooterGlow";
+import { Button } from "@/components/ui/Button";
 import { BUSINESS } from "@/constants/business";
-import { ROUTES, service } from "@/constants/routes";
-import { FOOTER_COMPANY_LINKS, FOOTER_LEGAL_LINKS } from "@/data/nav";
-import { SERVICES } from "@/data/services";
+import { ROUTES } from "@/constants/routes";
+import { FOOTER_LEGAL_LINKS } from "@/data/nav";
 import { MARKETS } from "@/data/markets";
+import { PLATFORMS } from "@/data/platforms";
 import { whatsappLink, WHATSAPP_MESSAGES } from "@/lib/utils/whatsapp";
 
+const SOCIAL_LINKS = [
+  { label: "WhatsApp", href: whatsappLink(WHATSAPP_MESSAGES.general) },
+  { label: "LinkedIn", href: BUSINESS.social.linkedin },
+  { label: "Instagram", href: BUSINESS.social.instagram },
+] as const;
+
 /**
- * kota.co.uk's footer is built around one huge clickable email address over
- * a drifting gradient backdrop, with everything else (socials, nav, sector
- * pills, legal) kept quiet underneath. NAP block still reads from
- * constants/business.ts so it can never drift from the LocalBusiness schema
- * built from the same file. See SEO Blueprint §6.7/§7.2.
+ * Mirrors kota.co.uk's footer row-for-row — logo left / one huge clickable
+ * email right, socials (plain text + external-link arrow, no leading icon)
+ * left / platform badges right (Velova's honest stand-in for Kota's award
+ * badges, shared with PlatformsStrip), a flat link row with a CTA pill, then
+ * sector pills + copyright on one line, all bright text on black — no
+ * divider borders between rows (Kota's footer is one unbroken glow, not
+ * bordered strips). No services/company link grid and no address block
+ * (Kota's footer carries none of that, and Velova's real street
+ * address/PIN/phone aren't filled in yet, so showing them here would leak
+ * literal "TODO" placeholder text) — full site nav still lives in the
+ * primary nav (Navbar/MobileNav).
  */
 export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer data-mode="dark" className="relative bg-bg text-text border-t border-border overflow-hidden">
-      <GradientMesh />
+    <footer data-mode="dark" className="relative bg-bg text-text overflow-hidden">
+      <FooterGlow />
 
       <div className="relative z-10 mx-auto max-w-[1440px] px-5 md:px-8 lg:px-16 py-16 md:py-24">
-        <div className="flex items-center gap-4 md:gap-6 mb-16">
-          <span className="hidden sm:grid grid-cols-2 gap-x-1 border-2 border-text p-2 leading-none shrink-0">
-            <span className="font-display text-xs font-bold uppercase text-text">Ve</span>
-            <span className="font-display text-xs font-bold uppercase text-text">Lo</span>
-            <span className="font-display text-xs font-bold uppercase text-text">Va</span>
-            <span className="font-display text-xs font-bold uppercase text-text">Me</span>
+        <div className="flex flex-wrap items-center justify-between gap-4 md:gap-6 mb-16">
+          <span
+            className="hidden sm:grid grid-cols-2 grid-rows-2 gap-x-2 gap-y-1.5 w-24 h-24 border-[3px] border-white p-3 shrink-0"
+            style={{ boxShadow: "0 0 28px rgba(255,255,255,0.25)" }}
+          >
+            <span className="flex items-center justify-center font-display text-sm font-bold uppercase leading-none text-white">Ve</span>
+            <span className="flex items-center justify-center font-display text-sm font-bold uppercase leading-none text-white">Lo</span>
+            <span className="flex items-center justify-center font-display text-sm font-bold uppercase leading-none text-white">Va</span>
+            <span className="flex items-center justify-center font-display text-sm font-bold uppercase leading-none text-white">Me</span>
           </span>
           <a
             href={`mailto:${BUSINESS.email}`}
             data-cursor="hover"
-            className="font-display font-semibold text-text text-[clamp(1.75rem,6vw,4.5rem)] leading-none tracking-tight hover:text-accent-text transition-colors break-all"
+            className="font-display font-semibold text-text text-[clamp(1.75rem,6vw,4.5rem)] leading-none tracking-tight hover:text-accent-text transition-colors break-all text-right"
           >
             {BUSINESS.email}
           </a>
         </div>
 
-        <div className="flex flex-wrap items-center gap-x-10 gap-y-4 mb-16 pb-16 border-b border-border">
-          <a
-            href={whatsappLink(WHATSAPP_MESSAGES.general)}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-cursor="hover"
-            className="flex items-center gap-2 text-sm font-semibold text-text hover:text-accent-text transition-colors"
-          >
-            <MessageCircle size={16} /> WhatsApp
-          </a>
-          <a
-            href={BUSINESS.social.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-cursor="hover"
-            className="flex items-center gap-2 text-sm font-semibold text-text hover:text-accent-text transition-colors"
-          >
-            <Linkedin size={16} /> LinkedIn
-          </a>
-          <a
-            href={BUSINESS.social.instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-cursor="hover"
-            className="flex items-center gap-2 text-sm font-semibold text-text hover:text-accent-text transition-colors"
-          >
-            <Instagram size={16} /> Instagram
-          </a>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr_1.2fr] gap-12 lg:gap-8 mb-16">
-          <nav aria-label="Services">
-            <p className="eyebrow mb-4">Services</p>
-            <ul className="flex flex-col gap-2.5">
-              {SERVICES.map((s) => (
-                <li key={s.slug}>
-                  <Link href={service(s.slug)} className="text-sm text-text-2 hover:text-accent-text transition-colors">
-                    {s.navLabel}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <nav aria-label="Company">
-            <p className="eyebrow mb-4">Company</p>
-            <ul className="flex flex-col gap-2.5">
-              {FOOTER_COMPANY_LINKS.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-text-2 hover:text-accent-text transition-colors">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div>
-            <p className="eyebrow mb-4">Ahmedabad HQ</p>
-            <address className="not-italic text-sm text-text-2 leading-relaxed">
-              {BUSINESS.address.streetAddress}
-              <br />
-              {BUSINESS.address.addressLocality}, {BUSINESS.address.addressRegion} {BUSINESS.address.postalCode}
-              <br />
-              {BUSINESS.address.addressCountry === "IN" ? "India" : BUSINESS.address.addressCountry}
-            </address>
-            <p className="text-sm text-text-2 mt-4">
-              <a href={`tel:${BUSINESS.phoneDisplay.replace(/\s+/g, "")}`} className="hover:text-accent-text transition-colors">
-                {BUSINESS.phoneDisplay}
+        <div className="flex flex-wrap items-center justify-between gap-x-10 gap-y-6 mb-16">
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+            {SOCIAL_LINKS.map((social) => (
+              <a
+                key={social.label}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cursor="hover"
+                className="inline-flex items-center gap-1.5 text-lg font-semibold text-text hover:text-accent-text transition-colors"
+              >
+                {social.label}
+                <ArrowUpRight size={17} strokeWidth={2} />
               </a>
-            </p>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            {PLATFORMS.map((platform) => (
+              <span
+                key={platform}
+                className="font-display text-sm font-semibold uppercase tracking-tight border border-text/40 rounded-[var(--radius-pill)] px-4 py-2 text-text"
+              >
+                {platform}
+              </span>
+            ))}
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 mb-16">
-          <span className="eyebrow !text-text-2 mr-2">Markets we serve</span>
-          {MARKETS.map((market) => (
-            <span
-              key={market.code}
-              className="rounded-[var(--radius-pill)] border border-border px-4 py-1.5 text-sm text-text-2"
-            >
-              {market.name}
-            </span>
-          ))}
-        </div>
-
-        <div className="pt-8 border-t border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <p className="text-xs text-text-2">
-            &copy; {year} {BUSINESS.legalName}. All rights reserved.
-          </p>
-          <div className="flex items-center gap-6">
+        <div className="flex flex-wrap items-center justify-between gap-6 mb-16">
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+            <Link href={ROUTES.contact} className="text-lg font-semibold text-text hover:text-accent-text transition-colors">
+              Contact
+            </Link>
             {FOOTER_LEGAL_LINKS.map((link) => (
-              <Link key={link.href} href={link.href} className="text-xs text-text-2 hover:text-accent-text transition-colors">
+              <Link key={link.href} href={link.href} className="text-lg font-semibold text-text hover:text-accent-text transition-colors">
                 {link.label}
               </Link>
             ))}
           </div>
+          <Button variant="secondary" href={ROUTES.contact}>
+            Get in touch
+          </Button>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="text-base font-semibold text-text mr-2">Markets we serve</span>
+            {MARKETS.map((market) => (
+              <span
+                key={market.code}
+                className="rounded-[var(--radius-pill)] border border-text/40 px-4 py-1.5 text-base text-text"
+              >
+                {market.name}
+              </span>
+            ))}
+          </div>
+          <p className="text-lg md:text-xl text-text">
+            &copy; {year} {BUSINESS.legalName}. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

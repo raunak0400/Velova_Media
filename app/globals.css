@@ -8,47 +8,47 @@
    flips back.
    ========================================================== */
 :root {
-  --velova-bg: #f7f5f0;
-  --velova-surface: #f1efe8;
+  --velova-bg: #efefef;
+  --velova-surface: #e9e9e9;
   --velova-text: #0a0a0a;
   --velova-text-2: #68666e;
   --velova-accent: #6d3ce0;
   --velova-accent-text: #5c2fc4;
   --velova-accent-dim: #4a2499;
   --velova-signal: #1f9d5c;
-  --velova-border: #e6e4ea;
+  --velova-border: #d4d4d4;
   --velova-error: #c0392b;
   --velova-shine: #e4d9ff;
   --velova-on-brand: #ffffff;
-  --velova-gradient: linear-gradient(90deg, #633cc9, #3b8392, #cb24cc);
-  --velova-gradient-alt: linear-gradient(135deg, #6c3ce1, #ff34f3);
+  --velova-gradient: linear-gradient(90deg, #ff34f3, #bf0cfe, #633cc9);
+  --velova-gradient-alt: linear-gradient(135deg, #f74ea1, #cb24cc, #6c3ce1);
 }
 
 [data-mode="light"] {
-  --velova-bg: #f7f5f0;
-  --velova-surface: #f1efe8;
+  --velova-bg: #efefef;
+  --velova-surface: #e9e9e9;
   --velova-text: #0a0a0a;
   --velova-text-2: #68666e;
   --velova-accent: #6d3ce0;
   --velova-accent-text: #5c2fc4;
   --velova-accent-dim: #4a2499;
   --velova-signal: #1f9d5c;
-  --velova-border: #e6e4ea;
+  --velova-border: #d4d4d4;
   --velova-error: #c0392b;
   --velova-shine: #e4d9ff;
   --velova-on-brand: #ffffff;
 }
 
 [data-mode="dark"] {
-  --velova-bg: #0a0a0b;
-  --velova-surface: #151517;
+  --velova-bg: #000000;
+  --velova-surface: #0d0d0d;
   --velova-text: #f5f4f7;
   --velova-text-2: #9c9aa3;
   --velova-accent: #8a5cf0;
   --velova-accent-text: #b79bff;
   --velova-accent-dim: #6d3ce0;
   --velova-signal: #34c17e;
-  --velova-border: #26252a;
+  --velova-border: #262626;
   --velova-error: #e2604c;
   --velova-shine: #2c2140;
   --velova-on-brand: #ffffff;
@@ -287,7 +287,7 @@
   position: absolute;
   border-radius: 50%;
   filter: blur(60px);
-  opacity: 0.78;
+  opacity: 0.55;
   will-change: transform;
 }
 .gradient-mesh__blob--a {
@@ -297,7 +297,7 @@
   max-height: 860px;
   top: -20%;
   left: -10%;
-  background: radial-gradient(circle, #f6ead5 0%, transparent 70%);
+  background: radial-gradient(circle, #f6e2c4 0%, transparent 70%);
   animation: meshDriftA 24s ease-in-out infinite alternate;
 }
 .gradient-mesh__blob--b {
@@ -307,7 +307,7 @@
   max-height: 820px;
   top: -5%;
   right: -14%;
-  background: radial-gradient(circle, #6cbfe6 0%, transparent 70%);
+  background: radial-gradient(circle, #8ecbe8 0%, transparent 70%);
   animation: meshDriftB 28s ease-in-out infinite alternate;
 }
 .gradient-mesh__blob--c {
@@ -317,7 +317,8 @@
   max-height: 760px;
   bottom: -25%;
   right: -4%;
-  background: radial-gradient(circle, #d648e0 0%, transparent 70%);
+  background: radial-gradient(circle, #c13fd6 0%, transparent 70%);
+  opacity: 0.4;
   animation: meshDriftC 20s ease-in-out infinite alternate;
 }
 .gradient-mesh__blob--d {
@@ -327,8 +328,8 @@
   max-height: 620px;
   bottom: -12%;
   left: 8%;
-  background: radial-gradient(circle, #3b8392 0%, transparent 70%);
-  opacity: 0.4;
+  background: radial-gradient(circle, #6b46c8 0%, transparent 70%);
+  opacity: 0.3;
   animation: meshDriftD 32s ease-in-out infinite alternate;
 }
 @keyframes meshDriftA {
@@ -378,6 +379,128 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .grain-overlay {
+    animation: none;
+  }
+}
+
+/* ==========================================================
+   Footer glow — black-dominant backdrop with a warm-to-cool animated
+   blob cluster confined to the bottom-right corner (kota.co.uk's footer
+   treatment), instead of the four-corner gradient-mesh wash used on light
+   sections. Left/top of the footer stay pure black.
+   ========================================================== */
+.footer-glow {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.footer-glow__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  will-change: transform;
+}
+.footer-glow__blob--pink {
+  width: 48vw;
+  height: 48vw;
+  max-width: 640px;
+  max-height: 640px;
+  bottom: -20%;
+  right: -10%;
+  background: radial-gradient(circle, #ff34f3 0%, transparent 70%);
+  opacity: 0.5;
+  animation: meshDriftA 22s ease-in-out infinite alternate;
+}
+.footer-glow__blob--magenta {
+  width: 42vw;
+  height: 42vw;
+  max-width: 580px;
+  max-height: 580px;
+  bottom: -8%;
+  right: 4%;
+  background: radial-gradient(circle, #bf0cfe 0%, transparent 70%);
+  opacity: 0.45;
+  animation: meshDriftB 26s ease-in-out infinite alternate;
+}
+.footer-glow__blob--blue {
+  width: 44vw;
+  height: 44vw;
+  max-width: 600px;
+  max-height: 600px;
+  bottom: 6%;
+  right: -16%;
+  background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+  opacity: 0.4;
+  animation: meshDriftC 24s ease-in-out infinite alternate;
+}
+.footer-glow__blob--warm {
+  width: 34vw;
+  height: 34vw;
+  max-width: 460px;
+  max-height: 460px;
+  bottom: -18%;
+  right: 20%;
+  background: radial-gradient(circle, #ffb23d 0%, transparent 70%);
+  opacity: 0.38;
+  animation: meshDriftD 28s ease-in-out infinite alternate;
+}
+
+/* ==========================================================
+   Animated video placeholder — stands in for real footage/photography
+   that hasn't been shot yet. A slow hue-shifting gradient sweep (reads as
+   "motion," not a static swatch) plus a pulsing play badge, so it's
+   legible as "video coming here" rather than mistaken for a finished
+   background treatment.
+   ========================================================== */
+.placeholder-video {
+  position: relative;
+  background-size: 240% 240%;
+  animation: placeholderSweep 7s ease-in-out infinite alternate;
+}
+.placeholder-video--ember {
+  background-image: linear-gradient(135deg, var(--color-accent-dim), var(--color-accent), var(--color-accent-text), var(--color-accent-dim));
+}
+.placeholder-video--ink {
+  background-image: linear-gradient(135deg, var(--color-border), var(--color-surface), var(--color-text-2), var(--color-border));
+}
+@keyframes placeholderSweep {
+  0% { background-position: 0% 30%; }
+  100% { background-position: 100% 70%; }
+}
+.placeholder-video__badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 15%;
+  height: 15%;
+  min-width: 28px;
+  min-height: 28px;
+  max-width: 56px;
+  max-height: 56px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  animation: placeholderPulse 2.4s ease-in-out infinite;
+}
+.placeholder-video__badge svg {
+  width: 38%;
+  height: 38%;
+  margin-left: 6%;
+}
+@keyframes placeholderPulse {
+  0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.08); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .placeholder-video,
+  .placeholder-video__badge {
     animation: none;
   }
 }

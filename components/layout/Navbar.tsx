@@ -46,11 +46,11 @@ export function Navbar() {
       >
         <nav className="mx-auto max-w-[1440px] px-5 md:px-8 lg:px-16 flex items-center justify-between">
           <Link href={ROUTES.home} data-cursor="hover" className="flex items-center gap-3 shrink-0">
-            <span className="grid grid-cols-2 gap-x-1 border-2 border-text p-1.5 leading-none">
-              <span className="font-display text-[11px] font-bold uppercase text-text">Ve</span>
-              <span className="font-display text-[11px] font-bold uppercase text-text">Lo</span>
-              <span className="font-display text-[11px] font-bold uppercase text-text">Va</span>
-              <span className="font-display text-[11px] font-bold uppercase text-text">Me</span>
+            <span className="grid grid-cols-2 grid-rows-2 gap-x-1 gap-y-0.5 w-11 h-11 border-2 border-text p-1.5">
+              <span className="flex items-center justify-center font-display text-[8px] font-bold uppercase leading-none text-text">Ve</span>
+              <span className="flex items-center justify-center font-display text-[8px] font-bold uppercase leading-none text-text">Lo</span>
+              <span className="flex items-center justify-center font-display text-[8px] font-bold uppercase leading-none text-text">Va</span>
+              <span className="flex items-center justify-center font-display text-[8px] font-bold uppercase leading-none text-text">Me</span>
             </span>
             <span className="hidden sm:block font-display text-lg font-bold uppercase tracking-tight text-text">
               {BUSINESS.name}

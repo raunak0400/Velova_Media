@@ -8,53 +8,67 @@ import { GradientMesh } from "@/components/motion/GradientMesh";
 import { ImageReveal } from "@/components/motion/ImageReveal";
 import { useSplitReveal } from "@/animations/hooks";
 import { ROUTES, caseStudy } from "@/constants/routes";
-import { MARKETS_SERVED } from "@/constants/business";
+import { PLATFORMS } from "@/data/platforms";
 import { CASE_STUDIES } from "@/data/case-studies";
+import { cn } from "@/lib/utils/cn";
 
 /**
- * H1 copy per client direction: "Where Brands Start To Shine" (a variant
- * of BUSINESS.tagline) replaces the longer SEO-blueprint headline as the
- * on-page hero statement. The lowercase display treatment and the "Shine"
- * gradient highlight are presentational only (text-transform + an inline
- * span).
+ * H1 copy per client direction: "Where Brands Starts To Shine" (matches
+ * BUSINESS.tagline verbatim). Laid out as three fixed stacked lines — matching
+ * kota.co.uk's "rebel / against / b[circle]ring" rhythm — with the circle
+ * replacing the "o" in "To" (the tagline's only round-glyph letter), sized
+ * in `em` so it scales with the word it's standing in for. Kota's hero is
+ * pure black text throughout (no color highlight), so "Shine" carries no
+ * gradient — weight is the only emphasis. type="words" (not "lines")
+ * deliberately: SplitText's line-mask sizes each line's overflow-hidden box
+ * from its own measured text height, and an inline circular image taller
+ * than the line was clipping the adjacent glyph. Word-level masks are sized
+ * per word, so they're unaffected by a sibling inline element's height.
  */
 export function Hero() {
   const subheadingRef = useSplitReveal<HTMLParagraphElement>({ type: "lines", trigger: "load", delay: 0.6 });
   const featuredCase = CASE_STUDIES[1];
 
   return (
-    <section data-mode="light" className="relative min-h-screen flex flex-col overflow-hidden bg-bg border-b border-border">
+    <section data-mode="light" className="relative h-screen flex flex-col overflow-hidden bg-bg border-b border-border">
       <GradientMesh />
 
-      <div className="relative z-10 flex-1 flex items-center mx-auto max-w-[1600px] w-full px-5 md:px-8 lg:px-16 pt-28">
+      <div className="relative z-10 flex-1 flex items-center mx-auto max-w-[1600px] w-full px-5 md:px-8 lg:px-16 pt-16">
         <AnimatedHeading
           as="h1"
-          type="lines"
+          type="words"
           trigger="load"
           delay={0.15}
-          className="heading-hero font-bold text-text lowercase leading-[0.85] tracking-[-0.02em] text-[clamp(2.75rem,8.5vw,8rem)] max-w-[90%]"
+          className="heading-hero font-bold text-text lowercase leading-[0.85] tracking-[-0.02em] text-[clamp(3rem,10.5vw,10rem)]"
         >
-          Where Brands{" "}
-          <Link
-            href={caseStudy(featuredCase.slug)}
-            data-cursor="hover"
-            className="inline-block align-middle mx-2 -translate-y-2 corner-card w-24 h-14 md:w-32 md:h-20 overflow-hidden border border-border normal-case"
-            aria-label={`Featured case study: ${featuredCase.clientLabel}`}
-          >
-            <ImageReveal alt={featuredCase.clientLabel} placeholderVariant="ember" className="w-full h-full" />
-          </Link>{" "}
-          Start To <span className="text-shine">Shine</span>
+          <span className="block">Where Brands</span>
+          <span className="block -mt-[0.42em]">
+            Starts T
+            <Link
+              href={caseStudy(featuredCase.slug)}
+              data-cursor="hover"
+              className="inline-block align-baseline -ml-[0.05em] translate-y-[22%] rounded-full w-[0.85em] h-[0.85em] overflow-hidden border border-border normal-case"
+              aria-label={`Featured case study: ${featuredCase.clientLabel}`}
+            >
+              <ImageReveal alt={featuredCase.clientLabel} placeholderVariant="ember" className="w-full h-full" />
+            </Link>
+          </span>
+          <span className="block -mt-[0.22em]">Shine</span>
         </AnimatedHeading>
       </div>
 
-      <div className="relative z-10 flex flex-col md:flex-row md:items-end md:justify-between gap-8 px-5 md:px-8 lg:px-16 pb-14">
-        <div className="flex flex-wrap items-center gap-2.5">
-          {MARKETS_SERVED.map((code) => (
+      <div className="relative z-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4 px-5 md:px-8 lg:px-16 pb-8">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+          {PLATFORMS.map((platform, i) => (
             <span
-              key={code}
-              className="font-display text-xs font-bold border border-text/40 text-text-2 px-3 py-1.5"
+              key={platform}
+              className={cn(
+                "font-display text-xs font-semibold uppercase tracking-wide text-text-2 pl-5",
+                i === 0 && "pl-0",
+                i > 0 && "border-l border-text/20",
+              )}
             >
-              {code}
+              {platform}
             </span>
           ))}
         </div>

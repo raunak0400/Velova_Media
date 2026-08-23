@@ -14,7 +14,7 @@
 export const BUSINESS = {
   name: "Velova Media",
   legalName: "Velova Media",
-  tagline: "Where Brand Starts to Shine",
+  tagline: "Where Brands Starts to Shine",
   foundingDescription: "Digital marketing agency in Ahmedabad, Gujarat, serving brands across India, the UK, the USA, Canada and the Netherlands.",
 
   // TODO(client): replace with the real registered office address.

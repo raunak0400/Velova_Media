@@ -1,5 +1,6 @@
 import { ArrowDownLeft } from "lucide-react";
 import { AnimatedHeading } from "@/components/motion/AnimatedHeading";
+import { PLATFORMS } from "@/data/platforms";
 
 /**
  * kota.co.uk devotes a full giant-heading section to a client-logo wall.
@@ -8,14 +9,6 @@ import { AnimatedHeading } from "@/components/motion/AnimatedHeading";
  * same visual beat — giant heading, diagonal arrow, a wall of marks —
  * honestly: the ad/commerce platforms Velova actually runs campaigns on.
  */
-const PLATFORMS = [
-  "Meta Ads",
-  "Google Ads",
-  "Shopify",
-  "WhatsApp Business",
-  "Amazon Ads",
-  "TikTok Ads",
-] as const;
 
 export function PlatformsStrip() {
   return (
