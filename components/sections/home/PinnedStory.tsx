@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, registerGSAP } from "@/animations/config";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { GradientMesh } from "@/components/motion/GradientMesh";
 
 const BEATS = [
   {
@@ -79,7 +78,6 @@ export function PinnedStory() {
       data-mode="dark"
       className="relative h-screen md:h-screen flex flex-col md:block border-b border-border overflow-hidden bg-bg"
     >
-      <GradientMesh />
       <div className="relative z-10 md:absolute md:inset-0 flex items-center">
         <div className="mx-auto max-w-[1440px] w-full px-5 md:px-8 lg:px-16 py-16 md:py-0">
           <div className="relative max-w-3xl md:min-h-[280px] flex flex-col gap-8 md:gap-0">

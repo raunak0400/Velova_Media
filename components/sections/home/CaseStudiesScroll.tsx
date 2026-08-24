@@ -4,7 +4,6 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { AnimatedHeading } from "@/components/motion/AnimatedHeading";
-import { GradientMesh } from "@/components/motion/GradientMesh";
 import { CaseStudyCard } from "@/components/content/CaseStudyCard";
 import { CASE_STUDIES } from "@/data/case-studies";
 import { ROUTES } from "@/constants/routes";
@@ -45,7 +44,6 @@ export function CaseStudiesScroll() {
 
   return (
     <section data-mode="dark" className="relative bg-bg border-b border-border overflow-hidden">
-      <GradientMesh />
       <div className="relative z-10 pt-16 md:pt-24 pb-10 px-5 md:px-8 lg:px-16 max-w-3xl">
         <p className="eyebrow mb-4">Featured Work</p>
         <p className="text-body-lg text-text-2 mb-6 max-w-lg leading-relaxed">
