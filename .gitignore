@@ -39,5 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-.claude
-.agents\skills
+
+# editor / AI tooling (not needed for the app or deployment)
+.claude/
+.agents/
+skills-lock.json
+
+# IDE
+.vscode/
+.idea/
