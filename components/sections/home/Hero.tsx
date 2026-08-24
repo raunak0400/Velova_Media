@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { AnimatedHeading } from "@/components/motion/AnimatedHeading";
 import { GradientMesh } from "@/components/motion/GradientMesh";
 import { ImageReveal } from "@/components/motion/ImageReveal";
-import { useSplitReveal } from "@/animations/hooks";
+import { useSplitReveal, useStaggerReveal } from "@/animations/hooks";
 import { ROUTES, caseStudy } from "@/constants/routes";
 import { PLATFORMS } from "@/data/platforms";
 import { CASE_STUDIES } from "@/data/case-studies";
@@ -27,6 +27,8 @@ import { cn } from "@/lib/utils/cn";
  */
 export function Hero() {
   const subheadingRef = useSplitReveal<HTMLParagraphElement>({ type: "lines", trigger: "load", delay: 0.6 });
+  const platformsRef = useStaggerReveal<HTMLDivElement>("[data-reveal-item]", { y: 10, stagger: 0.04, start: "top 100%" });
+  const buttonsRef = useStaggerReveal<HTMLDivElement>("[data-reveal-item]", { y: 14, stagger: 0.08, start: "top 100%" });
   const featuredCase = CASE_STUDIES[1];
 
   return (
@@ -66,10 +68,11 @@ export function Hero() {
       </div>
 
       <div className="relative z-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4 px-5 md:px-8 lg:px-16 pb-8">
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+        <div ref={platformsRef} className="flex flex-wrap items-center gap-x-5 gap-y-2">
           {PLATFORMS.map((platform, i) => (
             <span
               key={platform}
+              data-reveal-item
               className={cn(
                 "font-display text-xs font-semibold uppercase tracking-wide text-text-2 pl-5",
                 i === 0 && "pl-0",
@@ -87,13 +90,17 @@ export function Hero() {
             <strong className="text-text font-semibold">measurable results for ambitious brands</strong> across
             India, the UK, the USA, Canada and the Netherlands.
           </p>
-          <div className="flex flex-wrap items-center md:justify-end gap-4">
-            <Button variant="primary" size="lg" href={ROUTES.contact} icon={<ArrowRight size={18} />}>
-              Get a Free Consultation
-            </Button>
-            <Button variant="secondary" size="lg" href={ROUTES.caseStudies}>
-              View Our Work
-            </Button>
+          <div ref={buttonsRef} className="flex flex-wrap items-center md:justify-end gap-4">
+            <span data-reveal-item>
+              <Button variant="primary" size="lg" href={ROUTES.contact} icon={<ArrowRight size={18} />}>
+                Get a Free Consultation
+              </Button>
+            </span>
+            <span data-reveal-item>
+              <Button variant="secondary" size="lg" href={ROUTES.caseStudies}>
+                View Our Work
+              </Button>
+            </span>
           </div>
         </div>
       </div>

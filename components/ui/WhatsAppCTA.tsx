@@ -11,8 +11,10 @@ interface WhatsAppCTAProps {
 
 /**
  * WhatsApp is Velova's primary conversion channel (SEO Blueprint §2.1).
- * Signal green is reserved exclusively for this component — never reused
- * as a decorative accent elsewhere. See Design Architecture §4/§7.
+ * The button itself matches the site's monochrome pill system (same solid
+ * fill as `primary`) rather than WhatsApp's brand green, which clashed with
+ * the black/white/purple palette — the green survives only as a small tint
+ * on the icon, just enough to stay recognizable. See Design Architecture §4/§7.
  */
 export function WhatsAppCTA({ message, children = "Chat on WhatsApp", size = "md", className }: WhatsAppCTAProps) {
   return (
@@ -21,7 +23,7 @@ export function WhatsAppCTA({ message, children = "Chat on WhatsApp", size = "md
       size={size}
       href={whatsappLink(message)}
       external
-      icon={<MessageCircle size={18} strokeWidth={2} aria-hidden="true" />}
+      icon={<MessageCircle size={18} strokeWidth={2} className="text-signal" aria-hidden="true" />}
       iconPosition="left"
       className={className}
     >

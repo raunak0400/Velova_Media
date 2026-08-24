@@ -1,30 +1,70 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useGSAP } from "@gsap/react";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { ROUTES } from "@/constants/routes";
 import { BUSINESS } from "@/constants/business";
-import { cn } from "@/lib/utils/cn";
+import { gsap, registerGSAP, ScrollTrigger } from "@/animations/config";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+
+const SOLIDIFY_DISTANCE = 120;
 
 /**
  * kota.co.uk keeps its top bar to three elements — logo, a solid CTA pill,
  * a circular menu toggle — and puts every nav link behind the full-screen
  * overlay (MobileNav, triggered at every breakpoint here, not just mobile).
- * Transparent-over-hero, solid-on-scroll.
+ * Transparent-over-hero, solid-on-scroll — the solidify itself is a
+ * scrub-tied ScrollTrigger (same global-progress pattern as ScrollProgress)
+ * rather than a binary class swap, so the bar continuously interpolates
+ * instead of snapping at a fixed threshold.
  */
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLElement>(null);
   const [navOpen, setNavOpen] = useState(false);
+  const reducedMotion = useReducedMotion();
+
+  useGSAP(() => {
+    registerGSAP();
+    const bg = bgRef.current;
+    const nav = navRef.current;
+    if (!bg || !nav) return;
+
+    if (reducedMotion) {
+      gsap.set(bg, { opacity: 1 });
+      gsap.set(nav, { paddingTop: "0.75rem", paddingBottom: "0.75rem" });
+      return;
+    }
+
+    gsap.set(nav, { paddingTop: "1.25rem", paddingBottom: "1.25rem" });
+
+    const trigger = ScrollTrigger.create({
+      start: 0,
+      end: SOLIDIFY_DISTANCE,
+      scrub: true,
+      onUpdate: (self) => {
+        gsap.set(bg, { opacity: self.progress * 0.95 });
+        gsap.set(nav, {
+          paddingTop: gsap.utils.interpolate(1.25, 0.75, self.progress) + "rem",
+          paddingBottom: gsap.utils.interpolate(1.25, 0.75, self.progress) + "rem",
+        });
+      },
+    });
+
+    return () => trigger.kill();
+  }, { scope: headerRef, dependencies: [reducedMotion] });
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 64);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    const bg = bgRef.current;
+    if (!bg) return;
+    const scrollProgress = reducedMotion ? 1 : gsap.utils.clamp(0, 1, window.scrollY / SOLIDIFY_DISTANCE);
+    gsap.to(bg, { opacity: navOpen ? 1 : scrollProgress * 0.95, duration: 0.2 });
+  }, [navOpen, reducedMotion]);
 
   useEffect(() => {
     document.body.style.overflow = navOpen ? "hidden" : "";
@@ -35,16 +75,9 @@ export function Navbar() {
 
   return (
     <>
-      <header
-        className={cn(
-          "fixed top-0 inset-x-0 z-50 transition-[background-color,border-color,padding] duration-300 ease-[var(--ease-standard)]",
-          scrolled || navOpen
-            ? "bg-bg/95 backdrop-blur border-b border-border py-3"
-            : "bg-transparent border-b border-transparent py-5",
-        )}
-        data-mode="light"
-      >
-        <nav className="mx-auto max-w-[1440px] px-5 md:px-8 lg:px-16 flex items-center justify-between">
+      <header ref={headerRef} className="fixed top-0 inset-x-0 z-50" data-mode="light">
+        <div ref={bgRef} aria-hidden="true" className="absolute inset-0 bg-bg backdrop-blur border-b border-border opacity-0" />
+        <nav ref={navRef} className="relative mx-auto max-w-[1440px] px-5 md:px-8 lg:px-16 flex items-center justify-between">
           <Link href={ROUTES.home} data-cursor="hover" className="flex items-center gap-3 shrink-0">
             <span className="grid grid-cols-2 grid-rows-2 gap-x-1 gap-y-0.5 w-11 h-11 border-2 border-text p-1.5">
               <span className="flex items-center justify-center font-display text-[8px] font-bold uppercase leading-none text-text">Ve</span>

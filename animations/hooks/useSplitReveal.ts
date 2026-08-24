@@ -54,6 +54,12 @@ export function useSplitReveal<T extends HTMLElement>(
         linesClass: "split-line",
         wordsClass: "split-word",
         mask: type === "words" ? "words" : "lines",
+        // .text-shine relies on background-clip:text + color:transparent on
+        // one specific element — splitting inside it moves its text node
+        // into a new child span that doesn't carry that gradient fill,
+        // rendering fully invisible. Leaving it unsplit keeps the effect
+        // intact; it still rides along inside its enclosing word/line mask.
+        ignore: ".text-shine",
       });
 
       const targets = type === "words" ? split.words : split.lines;

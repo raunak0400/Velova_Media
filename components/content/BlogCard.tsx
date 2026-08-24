@@ -34,14 +34,14 @@ export function BlogCard({ post, className }: BlogCardProps) {
 
   if (!isPublished) {
     return (
-      <div className={cardClasses} aria-disabled="true">
+      <div className={cardClasses} data-reveal-item aria-disabled="true">
         {content}
       </div>
     );
   }
 
   return (
-    <Link href={blogPost(post.slug)} data-cursor="hover" className={cardClasses}>
+    <Link href={blogPost(post.slug)} data-cursor="hover" data-reveal-item className={cardClasses}>
       {content}
     </Link>
   );

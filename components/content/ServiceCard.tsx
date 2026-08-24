@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { ImageReveal } from "@/components/motion/ImageReveal";
+import { useParallax } from "@/animations/hooks";
 import { service } from "@/constants/routes";
 import { cn } from "@/lib/utils/cn";
 import type { ServiceSummary } from "@/data/services";
@@ -17,11 +20,13 @@ interface ServiceCardProps {
  */
 export function ServiceCard({ service: s, className }: ServiceCardProps) {
   const isHero = s.tier === "hero";
+  const mediaRef = useParallax<HTMLDivElement>({ depth: 10 });
 
   return (
     <Link
       href={service(s.slug)}
       data-cursor="hover"
+      data-reveal-item
       className={cn(
         "corner-card group relative flex flex-col overflow-hidden border border-border bg-surface transition-colors hover:border-accent-text",
         isHero ? "row-span-2" : "",
@@ -29,8 +34,10 @@ export function ServiceCard({ service: s, className }: ServiceCardProps) {
       )}
     >
       {isHero && (
-        <div className="h-40 md:h-48">
-          <ImageReveal alt={s.cardTitle} placeholderVariant="ember" className="h-full w-full" />
+        <div className="relative h-40 md:h-48 overflow-hidden">
+          <div ref={mediaRef} className="absolute inset-x-0 -top-[15%] h-[130%]">
+            <ImageReveal alt={s.cardTitle} placeholderVariant="ember" className="h-full w-full" />
+          </div>
         </div>
       )}
       <div className={cn("flex flex-col flex-1 justify-between gap-6", isHero ? "p-6 md:p-8" : "p-5 md:p-6")}>

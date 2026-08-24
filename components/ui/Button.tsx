@@ -45,7 +45,8 @@ const VARIANT_CLASSES: Record<ButtonVariant, string> = {
     "rounded-[var(--radius-pill)] border-2 border-text text-text bg-transparent hover:bg-[var(--color-text)] hover:text-[var(--color-bg)]",
   ghost: "bg-transparent text-text btn-ghost-underline",
   link: "bg-transparent text-accent-text font-medium underline-offset-4 decoration-transparent hover:decoration-accent-text underline p-0",
-  whatsapp: "rounded-[var(--radius-pill)] bg-signal text-white hover:brightness-[1.06]",
+  whatsapp:
+    "rounded-[var(--radius-pill)] border-2 border-text bg-[var(--color-text)] text-[var(--color-bg)] hover:bg-accent hover:border-accent hover:text-on-brand",
 };
 
 const PILL_VARIANTS: ButtonVariant[] = ["primary", "secondary", "whatsapp"];

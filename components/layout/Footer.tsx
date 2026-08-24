@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { FooterGlow } from "@/components/motion/FooterGlow";
 import { Button } from "@/components/ui/Button";
+import { useStaggerReveal } from "@/animations/hooks";
 import { BUSINESS } from "@/constants/business";
 import { ROUTES } from "@/constants/routes";
 import { FOOTER_LEGAL_LINKS } from "@/data/nav";
@@ -30,13 +33,14 @@ const SOCIAL_LINKS = [
  */
 export function Footer() {
   const year = new Date().getFullYear();
+  const revealRef = useStaggerReveal<HTMLDivElement>("[data-reveal-item]", { y: 20, stagger: 0.08, budget: "calm" });
 
   return (
     <footer data-mode="dark" className="relative bg-bg text-text overflow-hidden">
       <FooterGlow />
 
-      <div className="relative z-10 mx-auto max-w-[1440px] px-5 md:px-8 lg:px-16 py-16 md:py-24">
-        <div className="flex flex-wrap items-center justify-between gap-4 md:gap-6 mb-16">
+      <div ref={revealRef} className="relative z-10 mx-auto max-w-[1440px] px-5 md:px-8 lg:px-16 py-16 md:py-24">
+        <div data-reveal-item className="flex flex-wrap items-center justify-between gap-4 md:gap-6 mb-16">
           <span
             className="hidden sm:grid grid-cols-2 grid-rows-2 gap-x-2 gap-y-1.5 w-24 h-24 border-[3px] border-white p-3 shrink-0"
             style={{ boxShadow: "0 0 28px rgba(255,255,255,0.25)" }}
@@ -55,7 +59,7 @@ export function Footer() {
           </a>
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-x-10 gap-y-6 mb-16">
+        <div data-reveal-item className="flex flex-wrap items-center justify-between gap-x-10 gap-y-6 mb-16">
           <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
             {SOCIAL_LINKS.map((social) => (
               <a
@@ -84,7 +88,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-6 mb-16">
+        <div data-reveal-item className="flex flex-wrap items-center justify-between gap-6 mb-16">
           <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
             <Link href={ROUTES.contact} className="text-lg font-semibold text-text hover:text-accent-text transition-colors">
               Contact
@@ -100,7 +104,7 @@ export function Footer() {
           </Button>
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
+        <div data-reveal-item className="flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
           <div className="flex flex-wrap items-center gap-3">
             <span className="text-base font-semibold text-text mr-2">Markets we serve</span>
             {MARKETS.map((market) => (

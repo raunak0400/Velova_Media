@@ -9,6 +9,7 @@ import { AnimatedHeading } from "@/components/motion/AnimatedHeading";
 import { ImageReveal } from "@/components/motion/ImageReveal";
 import { ServiceCard } from "@/components/content/ServiceCard";
 import { Button } from "@/components/ui/Button";
+import { useLightDarkMorph, useParallax, useStaggerReveal } from "@/animations/hooks";
 import { SERVICES, SUPPORTING_SERVICES } from "@/data/services";
 import { service } from "@/constants/routes";
 import { cn } from "@/lib/utils/cn";
@@ -24,25 +25,41 @@ const HERO_SERVICES_LIST = SERVICES.filter((s) => s.tier === "hero");
 export function ServicesShowcase() {
   const [active, setActive] = useState(HERO_SERVICES_LIST[0].slug);
   const activeService = HERO_SERVICES_LIST.find((s) => s.slug === active) ?? HERO_SERVICES_LIST[0];
+  const morphRef = useLightDarkMorph<HTMLElement>();
+  const listRef = useStaggerReveal<HTMLUListElement>("[data-reveal-item]", { y: 16, stagger: 0.05 });
+  const mobileGridRef = useStaggerReveal<HTMLDivElement>("[data-reveal-item]");
+  const supportingGridRef = useStaggerReveal<HTMLDivElement>("[data-reveal-item]");
+  const previewMediaRef = useParallax<HTMLDivElement>({ depth: 8 });
+  const headerRef = useStaggerReveal<HTMLDivElement>("[data-reveal-item]", { stagger: 0.08 });
 
   return (
-    <section data-mode="light" className="relative bg-bg text-text py-20 md:py-32 border-b border-border overflow-hidden" id="services">
+    <section
+      ref={morphRef}
+      data-mode="light"
+      className="relative bg-bg text-text py-20 md:py-32 border-b border-border overflow-hidden"
+      id="services"
+    >
       <GradientMesh />
 
       <div className="relative z-10 mx-auto max-w-[1440px] px-5 md:px-8 lg:px-16">
-        <div className="relative mb-14 max-w-3xl">
-          <p className="eyebrow mb-4">Services</p>
+        <div ref={headerRef} className="relative mb-14 max-w-3xl">
+          <p data-reveal-item className="eyebrow mb-4">Services</p>
           <AnimatedHeading as="h2" className="heading-giant heading-giant--thin text-text">
             9 Services. One Agency.
           </AnimatedHeading>
-          <ArrowDownLeft className="hidden md:block absolute top-0 right-0 text-text-2" size={40} strokeWidth={1.5} />
+          <ArrowDownLeft
+            data-reveal-item
+            className="hidden md:block absolute top-0 right-0 text-text-2"
+            size={40}
+            strokeWidth={1.5}
+          />
         </div>
 
         {/* Desktop explorer */}
         <div className="hidden lg:grid grid-cols-[1fr_1.1fr] gap-16">
-          <ul className="flex flex-col border-t border-border">
+          <ul ref={listRef} className="flex flex-col border-t border-border">
             {HERO_SERVICES_LIST.map((s) => (
-              <li key={s.slug} className="border-b border-border">
+              <li key={s.slug} data-reveal-item className="border-b border-border">
                 <Link
                   href={service(s.slug)}
                   data-cursor="hover"
@@ -75,8 +92,10 @@ export function ServicesShowcase() {
                 transition={{ duration: DURATION.fast }}
                 className="absolute inset-0 flex flex-col"
               >
-                <div className="h-1/2">
-                  <ImageReveal alt={activeService.cardTitle} placeholderVariant="ember" className="h-full w-full" />
+                <div className="relative h-1/2 overflow-hidden">
+                  <div ref={previewMediaRef} className="absolute inset-x-0 -top-[10%] h-[120%]">
+                    <ImageReveal alt={activeService.cardTitle} placeholderVariant="ember" className="h-full w-full" />
+                  </div>
                 </div>
                 <div className="flex-1 p-8 flex flex-col justify-between gap-6">
                   <p className="text-body text-text-2 leading-relaxed">{activeService.cardSummary}</p>
@@ -90,7 +109,7 @@ export function ServicesShowcase() {
         </div>
 
         {/* Mobile / tablet grid fallback for hero services */}
-        <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 auto-rows-fr">
+        <div ref={mobileGridRef} className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 auto-rows-fr">
           {HERO_SERVICES_LIST.map((s) => (
             <ServiceCard key={s.slug} service={s} />
           ))}
@@ -98,7 +117,7 @@ export function ServicesShowcase() {
 
         <div className="mt-16">
           <p className="eyebrow mb-6">Also Available</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div ref={supportingGridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {SUPPORTING_SERVICES.map((s) => (
               <ServiceCard key={s.slug} service={s} />
             ))}

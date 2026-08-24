@@ -5,3 +5,5 @@ export { useCounter } from "./useCounter";
 export { useParallax } from "./useParallax";
 export { usePinnedSection } from "./usePinnedSection";
 export { useClipReveal } from "./useClipReveal";
+export { useLightDarkMorph } from "./useLightDarkMorph";
+export { useStaggerReveal } from "./useStaggerReveal";

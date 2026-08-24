@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { AnimatedHeading } from "@/components/motion/AnimatedHeading";
 import { CaseStudyCard } from "@/components/content/CaseStudyCard";
+import { useParallax, useStaggerReveal } from "@/animations/hooks";
 import { CASE_STUDIES } from "@/data/case-studies";
 import { ROUTES } from "@/constants/routes";
 import { cn } from "@/lib/utils/cn";
@@ -19,6 +20,9 @@ import { cn } from "@/lib/utils/cn";
  */
 export function CaseStudiesScroll() {
   const trackRef = useRef<HTMLDivElement>(null);
+  const revealRef = useStaggerReveal<HTMLDivElement>("[data-reveal-item]", { y: 32, stagger: 0.08 });
+  const headerRef = useStaggerReveal<HTMLDivElement>("[data-reveal-item]", { stagger: 0.08 });
+  const headingParallaxRef = useParallax<HTMLDivElement>({ depth: 8 });
   const [active, setActive] = useState(0);
 
   const updateActive = useCallback(() => {
@@ -44,20 +48,25 @@ export function CaseStudiesScroll() {
 
   return (
     <section data-mode="dark" className="relative bg-bg border-b border-border overflow-hidden">
-      <div className="relative z-10 pt-16 md:pt-24 pb-10 px-5 md:px-8 lg:px-16 max-w-3xl">
-        <p className="eyebrow mb-4">Featured Work</p>
-        <p className="text-body-lg text-text-2 mb-6 max-w-lg leading-relaxed">
+      <div ref={headerRef} className="relative z-10 pt-16 md:pt-24 pb-10 px-5 md:px-8 lg:px-16 max-w-3xl">
+        <p data-reveal-item className="eyebrow mb-4">Featured Work</p>
+        <p data-reveal-item className="text-body-lg text-text-2 mb-6 max-w-lg leading-relaxed">
           Full write-ups are being published as clients confirm what they&apos;re comfortable sharing publicly —
           here&apos;s what we&apos;ve been working on.
         </p>
-        <AnimatedHeading as="h2" className="heading-giant text-text">
-          Work
-        </AnimatedHeading>
+        <div ref={headingParallaxRef}>
+          <AnimatedHeading as="h2" className="heading-giant text-text">
+            Work
+          </AnimatedHeading>
+        </div>
         <span aria-hidden="true" className="block h-[3px] w-full mt-4 bg-signal" />
       </div>
 
       <div
-        ref={trackRef}
+        ref={(el) => {
+          trackRef.current = el;
+          revealRef.current = el;
+        }}
         className="relative z-10 flex gap-5 px-5 md:px-8 lg:px-16 pb-10 overflow-x-auto snap-x snap-mandatory scrollbar-none scroll-smooth"
       >
         {CASE_STUDIES.map((cs) => (
@@ -67,6 +76,7 @@ export function CaseStudiesScroll() {
         <Link
           href={ROUTES.caseStudies}
           data-cursor="hover"
+          data-reveal-item
           className="corner-card-lg group shrink-0 w-[85vw] sm:w-[420px] snap-start border border-dashed border-border flex flex-col items-center justify-center gap-3 text-text-2 hover:text-accent-text hover:border-accent-text transition-colors"
         >
           <span className="font-display text-h4">All case studies</span>

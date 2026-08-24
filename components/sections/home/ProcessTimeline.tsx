@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { GradientMesh } from "@/components/motion/GradientMesh";
 import { AnimatedHeading } from "@/components/motion/AnimatedHeading";
 import { ImageReveal } from "@/components/motion/ImageReveal";
+import { useParallax, useStaggerReveal } from "@/animations/hooks";
 import { PROCESS_STEPS } from "@/data/process";
 import { DURATION } from "@/constants/motion";
 import { cn } from "@/lib/utils/cn";
@@ -17,23 +18,27 @@ import { cn } from "@/lib/utils/cn";
 export function ProcessTimeline() {
   const [active, setActive] = useState(PROCESS_STEPS[0].index);
   const activeStep = PROCESS_STEPS.find((s) => s.index === active) ?? PROCESS_STEPS[0];
+  const tabsRef = useStaggerReveal<HTMLDivElement>("[data-reveal-item]", { y: 12, stagger: 0.05 });
+  const mediaRef = useParallax<HTMLDivElement>({ depth: 12 });
+  const headerRef = useStaggerReveal<HTMLDivElement>("[data-reveal-item]");
 
   return (
     <section data-mode="light" className="relative bg-bg text-text py-20 md:py-32 border-b border-border overflow-hidden">
       <GradientMesh />
 
       <div className="relative z-10 mx-auto max-w-[1440px] px-5 md:px-8 lg:px-16">
-        <div className="mb-12 max-w-3xl">
-          <p className="eyebrow mb-4">How We Work</p>
+        <div ref={headerRef} className="mb-12 max-w-3xl">
+          <p data-reveal-item className="eyebrow mb-4">How We Work</p>
           <AnimatedHeading as="h2" className="heading-giant text-text">
             From first message to monthly report.
           </AnimatedHeading>
         </div>
 
-        <div className="flex flex-wrap gap-3 mb-10">
+        <div ref={tabsRef} className="flex flex-wrap gap-3 mb-10">
           {PROCESS_STEPS.map((step) => (
             <button
               key={step.index}
+              data-reveal-item
               onClick={() => setActive(step.index)}
               data-cursor="hover"
               className={cn(
@@ -49,8 +54,10 @@ export function ProcessTimeline() {
         </div>
 
         <div className="corner-card-lg grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-0 border border-border overflow-hidden">
-          <div className="h-64 lg:h-auto">
-            <ImageReveal alt={activeStep.title} placeholderVariant="ink" className="h-full w-full" />
+          <div className="relative h-64 lg:h-auto overflow-hidden">
+            <div ref={mediaRef} className="absolute inset-x-0 -top-[12%] h-[124%]">
+              <ImageReveal alt={activeStep.title} placeholderVariant="ink" className="h-full w-full" />
+            </div>
           </div>
           <div className="relative p-8 md:p-12 bg-surface overflow-hidden min-h-[260px]">
             <AnimatePresence mode="wait">

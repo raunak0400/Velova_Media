@@ -355,6 +355,30 @@
   }
 }
 /* ==========================================================
+   Fluid background — WebGL shader-driven replacement for the gradient
+   mesh blobs above. Same position/inset contract so it's a drop-in
+   swap; the .gradient-mesh markup above is reused verbatim as its
+   WebGL-unavailable and reduced-motion fallback (see FluidBackground.tsx).
+   ========================================================== */
+.fluid-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.fluid-bg__canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.fluid-bg--static {
+  animation: none !important;
+}
+.fluid-bg--static .gradient-mesh__blob {
+  animation: none !important;
+}
+/* ==========================================================
    Grain overlay — subtle animated film-grain texture over the whole
    viewport, matching kota.co.uk's off-white/textured paper feel.
    ========================================================== */
