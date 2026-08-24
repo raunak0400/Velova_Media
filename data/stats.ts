@@ -20,5 +20,5 @@ export interface HomeStat {
 export const HOME_STATS: HomeStat[] = [
   { value: 9, suffix: "+", label: "Services, one agency" },
   { value: 10, suffix: "+", label: "Years running Meta Ads & social" },
-  { value: 5, suffix: "", label: "Markets served worldwide" },
+  { value: 10, suffix: "+", label: "Markets served worldwide" },
 ];

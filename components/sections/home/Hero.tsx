@@ -34,27 +34,35 @@ export function Hero() {
       <GradientMesh />
 
       <div className="relative z-10 flex-1 flex items-center mx-auto max-w-[1600px] w-full px-5 md:px-8 lg:px-16 pt-16">
-        <AnimatedHeading
-          as="h1"
-          type="words"
-          trigger="load"
-          delay={0.15}
-          className="heading-hero font-bold text-text lowercase leading-[0.85] tracking-[-0.02em] text-[clamp(3rem,10.5vw,10rem)]"
-        >
-          <span className="block">Where Brands</span>
-          <span className="block -mt-[0.42em]">
-            Starts T
-            <Link
-              href={caseStudy(featuredCase.slug)}
-              data-cursor="hover"
-              className="inline-block align-baseline -ml-[0.05em] translate-y-[22%] rounded-full w-[0.85em] h-[0.85em] overflow-hidden border border-border normal-case"
-              aria-label={`Featured case study: ${featuredCase.clientLabel}`}
-            >
-              <ImageReveal alt={featuredCase.clientLabel} placeholderVariant="ember" className="w-full h-full" />
-            </Link>
-          </span>
-          <span className="block -mt-[0.22em]">Shine</span>
-        </AnimatedHeading>
+        <div className="relative w-full">
+          <AnimatedHeading
+            as="h1"
+            type="words"
+            trigger="load"
+            delay={0.15}
+            className="heading-hero font-bold text-text lowercase leading-[0.85] tracking-[-0.02em] text-[clamp(3rem,10.5vw,10rem)]"
+          >
+            <span className="block">Where Brands</span>
+            <span className="block -mt-[0.42em]">
+              Starts T
+              <Link
+                href={caseStudy(featuredCase.slug)}
+                data-cursor="hover"
+                className="inline-block align-baseline -ml-[0.05em] translate-y-[22%] rounded-full w-[0.85em] h-[0.85em] overflow-hidden border border-border normal-case"
+                aria-label={`Featured case study: ${featuredCase.clientLabel}`}
+              >
+                <ImageReveal alt={featuredCase.clientLabel} placeholderVariant="ember" className="w-full h-full" />
+              </Link>
+            </span>
+            <span className="block -mt-[0.22em]">Shine</span>
+          </AnimatedHeading>
+
+          <p className="hidden lg:block absolute right-0 top-[38%] max-w-[340px] xl:max-w-[480px] pr-6 lg:pr-10 text-h3 text-text-2 leading-snug text-left">
+            A digital marketing agency based in Ahmedabad, where{" "}
+            <strong className="text-text font-semibold">creative strategy meets measurable growth</strong> for
+            ambitious brands worldwide.
+          </p>
+        </div>
       </div>
 
       <div className="relative z-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4 px-5 md:px-8 lg:px-16 pb-8">
