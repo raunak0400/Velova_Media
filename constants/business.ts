@@ -17,19 +17,16 @@ export const BUSINESS = {
   tagline: "Where Brands Starts to Shine",
   foundingDescription: "Digital marketing agency in Ahmedabad, Gujarat, serving brands across India, the UK, the USA, Canada and the Netherlands.",
 
-  // TODO(client): replace with the real registered office address.
   address: {
-    streetAddress: "TODO — add full street address",
+    streetAddress: "Park Avenue, 9, Opposite Neelkanth Bungalows, Near Gulab Tower Road, Shenbhai Nagar",
     addressLocality: "Ahmedabad",
     addressRegion: "Gujarat",
-    postalCode: "TODO — add PIN code",
+    postalCode: "380052",
     addressCountry: "IN",
   },
 
-  // TODO(client): replace with the real, monitored WhatsApp Business number (E.164 format, no spaces).
-  whatsappNumber: "91TODOTODOTO",
-  // TODO(client): replace with the real public contact number (may be the same as WhatsApp).
-  phoneDisplay: "+91 TODO TODO TODO",
+  whatsappNumber: "916354989658",
+  phoneDisplay: "+91 63549 89658",
   email: "hello@velovamedia.com",
 
   social: {
