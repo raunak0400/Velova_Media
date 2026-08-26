@@ -2,6 +2,8 @@ export interface ProcessStep {
   index: string;
   title: string;
   description: string;
+  /** Optional showcase video for the stacked panel's media area (added later per step). */
+  videoSrc?: string;
 }
 
 /**

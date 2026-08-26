@@ -1,129 +1,103 @@
 "use client";
 
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { ArrowDownLeft, ArrowUpRight } from "lucide-react";
-import Link from "next/link";
+import { ArrowDownLeft, ArrowRight } from "lucide-react";
 import { GradientMesh } from "@/components/motion/GradientMesh";
-import { AnimatedHeading } from "@/components/motion/AnimatedHeading";
-import { ImageReveal } from "@/components/motion/ImageReveal";
-import { ServiceCard } from "@/components/content/ServiceCard";
+import { VideoReveal } from "@/components/motion/VideoReveal";
 import { Button } from "@/components/ui/Button";
-import { useLightDarkMorph, useParallax, useStaggerReveal } from "@/animations/hooks";
-import { SERVICES, SUPPORTING_SERVICES } from "@/data/services";
+import { HERO_SERVICES } from "@/data/services";
 import { service } from "@/constants/routes";
-import { cn } from "@/lib/utils/cn";
-import { DURATION } from "@/constants/motion";
-
-const HERO_SERVICES_LIST = SERVICES.filter((s) => s.tier === "hero");
 
 /**
- * Desktop: hover-driven list + live preview panel — an explorer, not a
- * static grid. Mobile: falls back to the tiered ServiceCard grid, since a
- * hover interaction has no equivalent on touch. See Design Architecture §8.
+ * Branding showreels cycled across the service tiles: tile 1 → Branding-1,
+ * 2 → Branding-2, 3 → Branding-3, 4 → Branding-1, and so on (index % 3). A
+ * per-service `videoSrc` in data/services.ts still overrides its slot.
+ */
+const BRANDING_VIDEOS = ["/Branding-1.mp4", "/Branding-2.mp4", "/Branding-3.mp4"];
+
+/**
+ * kota.co.uk's "OUR SERVICES" treatment: a giant intro panel pins to the top,
+ * then each service panel is `position: sticky` and slides up over the one
+ * before it as you scroll — the "flipping pages of a book" stack.
+ *
+ * Implemented as a pure-CSS sticky-stack rather than a GSAP pin: Lenis runs in
+ * native-scroll mode here, so top:0 sticky sticks to the viewport, and this
+ * avoids a pin hijacking scroll and fighting the per-card ScrollTriggers
+ * elsewhere on the page (same reasoning as CaseStudiesScroll). Each panel is
+ * opaque (bg-bg) with a rounded top edge + top shadow, so the incoming panel
+ * reads as a sheet covering the previous one.
+ *
+ * Media areas are VideoReveal placeholders until real footage is dropped in
+ * per service via `videoSrc` in data/services.ts.
  */
 export function ServicesShowcase() {
-  const [active, setActive] = useState(HERO_SERVICES_LIST[0].slug);
-  const activeService = HERO_SERVICES_LIST.find((s) => s.slug === active) ?? HERO_SERVICES_LIST[0];
-  const morphRef = useLightDarkMorph<HTMLElement>();
-  const listRef = useStaggerReveal<HTMLUListElement>("[data-reveal-item]", { y: 16, stagger: 0.05 });
-  const mobileGridRef = useStaggerReveal<HTMLDivElement>("[data-reveal-item]");
-  const supportingGridRef = useStaggerReveal<HTMLDivElement>("[data-reveal-item]");
-  const previewMediaRef = useParallax<HTMLDivElement>({ depth: 8 });
-  const headerRef = useStaggerReveal<HTMLDivElement>("[data-reveal-item]", { stagger: 0.08 });
-
   return (
-    <section
-      ref={morphRef}
-      data-mode="light"
-      className="relative bg-bg text-text py-20 md:py-32 border-b border-border overflow-hidden"
-      id="services"
-    >
-      <GradientMesh />
-
-      <div className="relative z-10 mx-auto max-w-[1440px] px-5 md:px-8 lg:px-16">
-        <div ref={headerRef} className="relative mb-14 max-w-3xl">
-          <p data-reveal-item className="eyebrow mb-4">Services</p>
-          <AnimatedHeading as="h2" className="heading-giant heading-giant--thin text-text">
-            9 Services. One Agency.
-          </AnimatedHeading>
-          <ArrowDownLeft
-            data-reveal-item
-            className="hidden md:block absolute top-0 right-0 text-text-2"
-            size={40}
-            strokeWidth={1.5}
-          />
-        </div>
-
-        {/* Desktop explorer */}
-        <div className="hidden lg:grid grid-cols-[1fr_1.1fr] gap-16">
-          <ul ref={listRef} className="flex flex-col border-t border-border">
-            {HERO_SERVICES_LIST.map((s) => (
-              <li key={s.slug} data-reveal-item className="border-b border-border">
-                <Link
-                  href={service(s.slug)}
-                  data-cursor="hover"
-                  onMouseEnter={() => setActive(s.slug)}
-                  className={cn(
-                    "flex items-center justify-between py-5 px-2 transition-colors group",
-                    active === s.slug ? "text-accent-text" : "text-text hover:text-accent-text",
-                  )}
-                >
-                  <span className="flex items-baseline gap-4">
-                    <span className="font-display text-h4">{s.cardTitle}</span>
-                    <span className="eyebrow !text-text-2">Hero</span>
-                  </span>
-                  <ArrowUpRight
-                    size={20}
-                    className={cn("transition-transform", active === s.slug && "translate-x-1 -translate-y-1")}
-                  />
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          <div data-mode="dark" className="corner-card-lg relative h-[460px] bg-bg overflow-hidden">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeService.slug}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: DURATION.fast }}
-                className="absolute inset-0 flex flex-col"
-              >
-                <div className="relative h-1/2 overflow-hidden">
-                  <div ref={previewMediaRef} className="absolute inset-x-0 -top-[10%] h-[120%]">
-                    <ImageReveal alt={activeService.cardTitle} placeholderVariant="ember" className="h-full w-full" />
-                  </div>
-                </div>
-                <div className="flex-1 p-8 flex flex-col justify-between gap-6">
-                  <p className="text-body text-text-2 leading-relaxed">{activeService.cardSummary}</p>
-                  <Button variant="secondary" href={service(activeService.slug)} className="w-fit">
-                    Find out more
-                  </Button>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
-
-        {/* Mobile / tablet grid fallback for hero services */}
-        <div ref={mobileGridRef} className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 auto-rows-fr">
-          {HERO_SERVICES_LIST.map((s) => (
-            <ServiceCard key={s.slug} service={s} />
-          ))}
-        </div>
-
-        <div className="mt-16">
-          <p className="eyebrow mb-6">Also Available</p>
-          <div ref={supportingGridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {SUPPORTING_SERVICES.map((s) => (
-              <ServiceCard key={s.slug} service={s} />
-            ))}
+    <section id="services" className="relative bg-bg">
+      {/* Intro — "OUR SERVICES" */}
+      <div data-mode="light" className="lg:sticky lg:top-0 h-screen overflow-hidden bg-bg flex items-center">
+        <GradientMesh />
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-5 md:px-8 lg:px-16">
+          <div className="relative">
+            <h2 className="heading-giant text-text" style={{ fontSize: "clamp(3.5rem, 13vw, 12rem)" }}>
+              <span className="block">Our</span>
+              <span className="block pl-[0.5em]">Services</span>
+            </h2>
+            <ArrowDownLeft
+              aria-hidden="true"
+              strokeWidth={1.1}
+              className="hidden md:block absolute right-0 bottom-[0.15em] text-text w-[11vw] h-[11vw] max-w-[190px] max-h-[190px]"
+            />
           </div>
         </div>
       </div>
+
+      {/* Stacked service panels — each slides up over the previous */}
+      {HERO_SERVICES.map((s, i) => (
+        <article
+          key={s.slug}
+          data-mode="light"
+          className="lg:sticky lg:top-0 lg:min-h-screen overflow-hidden bg-bg rounded-t-[2rem] md:rounded-t-[3rem] border-t border-border shadow-[0_-24px_60px_-30px_rgba(0,0,0,0.28)] flex items-center"
+        >
+          <div className="mx-auto w-full max-w-[1440px] px-5 md:px-8 lg:px-16 py-16 lg:py-20 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+            {/* Left — copy */}
+            <div>
+              <h3 className="font-display font-medium text-text tracking-[-0.02em] leading-[0.98] text-[clamp(2.5rem,5.5vw,5rem)] mb-8">
+                {s.cardTitle}
+              </h3>
+
+              {s.tags && (
+                <div className="flex flex-wrap gap-3 mb-8">
+                  {s.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="inline-flex items-center rounded-full border border-border px-5 py-2.5 text-body text-text"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <p className="text-body-lg text-text-2 leading-relaxed max-w-lg mb-8">{s.cardSummary}</p>
+
+              <Button
+                variant="secondary"
+                href={service(s.slug)}
+                icon={<ArrowRight size={18} strokeWidth={2} aria-hidden="true" />}
+              >
+                Find out more
+              </Button>
+            </div>
+
+            {/* Right — media (drop a `videoSrc` into data/services.ts to fill) */}
+            <VideoReveal
+              src={s.videoSrc ?? BRANDING_VIDEOS[i % BRANDING_VIDEOS.length]}
+              alt={`${s.cardTitle} showcase`}
+              placeholderVariant="ink"
+              className="corner-card-lg w-full aspect-[4/3] lg:aspect-auto lg:h-[560px]"
+            />
+          </div>
+        </article>
+      ))}
     </section>
   );
 }

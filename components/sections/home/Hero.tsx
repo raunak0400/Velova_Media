@@ -4,8 +4,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { AnimatedHeading } from "@/components/motion/AnimatedHeading";
-import { GradientMesh } from "@/components/motion/GradientMesh";
-import { ImageReveal } from "@/components/motion/ImageReveal";
+import { VideoReveal } from "@/components/motion/VideoReveal";
 import { useSplitReveal, useStaggerReveal } from "@/animations/hooks";
 import { ROUTES, caseStudy } from "@/constants/routes";
 import { PLATFORMS } from "@/data/platforms";
@@ -32,9 +31,7 @@ export function Hero() {
   const featuredCase = CASE_STUDIES[1];
 
   return (
-    <section data-mode="light" className="relative h-screen flex flex-col overflow-hidden bg-bg border-b border-border">
-      <GradientMesh />
-
+    <section data-mode="light" className="relative h-screen flex flex-col overflow-hidden">
       <div className="relative z-10 flex-1 flex items-center mx-auto max-w-[1600px] w-full px-5 md:px-8 lg:px-16 pt-16">
         <div className="relative w-full">
           <AnimatedHeading
@@ -50,10 +47,15 @@ export function Hero() {
               <Link
                 href={caseStudy(featuredCase.slug)}
                 data-cursor="hover"
-                className="inline-block align-baseline -ml-[0.05em] translate-y-[22%] rounded-full w-[0.85em] h-[0.85em] overflow-hidden border border-border normal-case"
+                className="inline-block align-middle ml-[0.08em] -translate-y-[5%] rounded-[0.32em] w-[1.1em] h-[1.1em] overflow-hidden border border-border normal-case"
                 aria-label={`Featured case study: ${featuredCase.clientLabel}`}
               >
-                <ImageReveal alt={featuredCase.clientLabel} placeholderVariant="ember" className="w-full h-full" />
+                <VideoReveal
+                  src="/show-reel.mp4"
+                  alt={`${featuredCase.clientLabel} show reel`}
+                  placeholderVariant="ember"
+                  className="w-full h-full"
+                />
               </Link>
             </span>
             <span className="block -mt-[0.22em]">Shine</span>

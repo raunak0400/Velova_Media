@@ -11,6 +11,7 @@ import { PlatformsStrip } from "@/components/sections/home/PlatformsStrip";
 import { LatestArticles } from "@/components/sections/home/LatestArticles";
 import { FAQSection } from "@/components/sections/home/FAQSection";
 import { CTASection } from "@/components/sections/CTASection";
+import { GradientMesh } from "@/components/motion/GradientMesh";
 import { Marquee } from "@/components/motion/Marquee";
 import { SERVICES } from "@/data/services";
 
@@ -37,11 +38,17 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <Hero />
-      <WhyVelova />
+      {/* Hero + WhyVelova share one continuous gradient-mesh background so the
+          section boundary reads as a smooth transition, not a seam. Both
+          sections are transparent; the base color + drifting mesh live here. */}
+      <div className="relative overflow-hidden bg-bg">
+        <GradientMesh />
+        <Hero />
+        <WhyVelova />
+      </div>
       <ServicesShowcase />
-      <PinnedStory />
       <ProcessTimeline />
+      <PinnedStory />
       <CaseStudiesScroll />
       <StatsBar />
       <PlatformsStrip />

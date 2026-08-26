@@ -18,6 +18,10 @@ export interface ServiceSummary {
   navLabel: string;
   cardTitle: string;
   cardSummary: string;
+  /** Sub-service pills shown on the stacked "Our Services" panels (hero tier). */
+  tags?: string[];
+  /** Optional showcase video for the stacked panel's media area (added later per service). */
+  videoSrc?: string;
 }
 
 export const SERVICES: ServiceSummary[] = [
@@ -27,6 +31,7 @@ export const SERVICES: ServiceSummary[] = [
     navLabel: "Meta Ads & Social",
     cardTitle: "Meta Ads & Social",
     cardSummary: "Instagram, Facebook and performance campaigns — the specialism our client history most directly supports.",
+    tags: ["Meta Ads", "Instagram & Facebook", "Performance campaigns"],
   },
   {
     slug: "shopify-store-creation",
@@ -34,6 +39,7 @@ export const SERVICES: ServiceSummary[] = [
     navLabel: "Shopify Development",
     cardTitle: "Shopify Store Creation",
     cardSummary: "Storefronts built for D2C brands selling into India, Europe and North America from day one.",
+    tags: ["Storefront design", "D2C build", "Conversion optimisation"],
   },
   {
     slug: "seo",
@@ -41,6 +47,7 @@ export const SERVICES: ServiceSummary[] = [
     navLabel: "SEO",
     cardTitle: "SEO",
     cardSummary: "Structured for classic rankings and the AI-search systems now sitting on top of them.",
+    tags: ["Technical SEO", "AI search", "Content & copy"],
   },
   {
     slug: "b2b-lead-generation",
@@ -48,6 +55,7 @@ export const SERVICES: ServiceSummary[] = [
     navLabel: "B2B Lead Generation",
     cardTitle: "B2B Lead Generation",
     cardSummary: "Click-to-WhatsApp campaigns and qualification funnels that start real conversations, not spreadsheets.",
+    tags: ["Click-to-WhatsApp", "Lead funnels", "Qualification"],
   },
   {
     slug: "google-ads",
