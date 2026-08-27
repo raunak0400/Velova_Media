@@ -36,7 +36,12 @@ export function useParallax<T extends HTMLElement>(
           trigger: el.parentElement ?? el,
           start: "top bottom",
           end: "bottom top",
-          scrub: true,
+          // Numeric scrub (vs `true`) gives GSAP a short catch-up window so the
+          // parallax glides toward the scroll position instead of tracking it
+          // pixel-exact every frame — reads noticeably smoother, especially
+          // layered on top of Lenis's already-interpolated scroll. Kept small
+          // so the parallax still feels anchored to the scroll, not laggy.
+          scrub: 0.4,
         },
       },
     );

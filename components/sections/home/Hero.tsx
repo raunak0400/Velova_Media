@@ -47,14 +47,15 @@ export function Hero() {
               <Link
                 href={caseStudy(featuredCase.slug)}
                 data-cursor="hover"
-                className="inline-block align-middle ml-[0.08em] -translate-y-[5%] rounded-[0.32em] w-[1.1em] h-[1.1em] overflow-hidden border border-border normal-case"
+                className="inline-block align-middle ml-[0.08em] -translate-y-[5%] rounded-full w-[1.1em] h-[1.1em] overflow-hidden border border-border normal-case"
                 aria-label={`Featured case study: ${featuredCase.clientLabel}`}
               >
                 <VideoReveal
                   src="/show-reel.mp4"
+                  poster="/show-reel-poster.jpg"
                   alt={`${featuredCase.clientLabel} show reel`}
                   placeholderVariant="ember"
-                  className="w-full h-full"
+                  className="w-full h-full rounded-full"
                 />
               </Link>
             </span>

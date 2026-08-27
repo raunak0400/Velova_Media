@@ -42,7 +42,11 @@ export function useLightDarkMorph<T extends HTMLElement>(): RefObject<T | null> 
           trigger: el,
           start: "bottom-=400 bottom",
           end: "bottom top",
-          scrub: true,
+          // Slightly larger catch-up than the parallax: this scrubs a
+          // background-color repaint across a large section, so a bit of
+          // smoothing lets the wash glide and masks any per-frame paint
+          // stepping on lower-end devices.
+          scrub: 0.7,
         },
       },
     );

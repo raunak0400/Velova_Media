@@ -24,14 +24,23 @@ export function CursorProvider({ children }: { children: ReactNode }) {
     let y = window.innerHeight / 2;
     let raf = 0;
 
+    // Render on demand: only schedule a frame when the pointer actually moved,
+    // and let the loop go idle otherwise. A permanently-running rAF costs a
+    // main-thread callback every frame for the whole session even when the
+    // cursor is still — pure waste that competes with scroll/animation work.
+    const render = () => {
+      raf = 0;
+      dot.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+    };
+
+    const scheduleRender = () => {
+      if (!raf) raf = requestAnimationFrame(render);
+    };
+
     const move = (e: PointerEvent) => {
       x = e.clientX;
       y = e.clientY;
-    };
-
-    const render = () => {
-      dot.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
-      raf = requestAnimationFrame(render);
+      scheduleRender();
     };
 
     const onOver = (e: PointerEvent) => {
@@ -47,7 +56,7 @@ export function CursorProvider({ children }: { children: ReactNode }) {
 
     window.addEventListener("pointermove", move, { passive: true });
     window.addEventListener("pointerover", onOver, { passive: true });
-    raf = requestAnimationFrame(render);
+    scheduleRender();
     document.documentElement.classList.add("has-custom-cursor");
 
     return () => {

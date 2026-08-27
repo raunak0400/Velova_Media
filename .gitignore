@@ -48,3 +48,6 @@ skills-lock.json
 # IDE
 .vscode/
 .idea/
+
+# local video source backups (originals kept out of the repo)
+/_video-originals-backup/

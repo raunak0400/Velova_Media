@@ -277,11 +277,11 @@
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
-  animation: meshHue 18s ease-in-out infinite alternate;
-}
-@keyframes meshHue {
-  from { filter: hue-rotate(0deg); }
-  to { filter: hue-rotate(18deg); }
+  /* NOTE: previously animated `filter: hue-rotate()` here. Animating a filter
+     on this container forced the browser to re-run the whole blur pipeline of
+     the four blur(60px) blobs below on every frame (a blurred layer can't be
+     cached while a parent filter animates) — very expensive, and on the hero
+     which is visible on load. The subtle hue drift isn't worth that cost. */
 }
 .gradient-mesh__blob {
   position: absolute;
@@ -332,21 +332,25 @@
   opacity: 0.3;
   animation: meshDriftD 32s ease-in-out infinite alternate;
 }
+/* Translate-only drift (no scale): scaling a blur(60px) element re-rasterizes
+   the blur every frame, whereas a pure translate stays on the compositor and
+   costs nothing beyond a layer transform. The size pulse was imperceptible
+   under a 60px blur anyway. */
 @keyframes meshDriftA {
-  from { transform: translate(0, 0) scale(1); }
-  to { transform: translate(5%, 7%) scale(1.08); }
+  from { transform: translate(0, 0); }
+  to { transform: translate(5%, 7%); }
 }
 @keyframes meshDriftB {
-  from { transform: translate(0, 0) scale(1); }
-  to { transform: translate(-7%, 5%) scale(0.94); }
+  from { transform: translate(0, 0); }
+  to { transform: translate(-7%, 5%); }
 }
 @keyframes meshDriftC {
-  from { transform: translate(0, 0) scale(1); }
-  to { transform: translate(-5%, -6%) scale(1.1); }
+  from { transform: translate(0, 0); }
+  to { transform: translate(-5%, -6%); }
 }
 @keyframes meshDriftD {
-  from { transform: translate(0, 0) scale(1); }
-  to { transform: translate(6%, -4%) scale(1.05); }
+  from { transform: translate(0, 0); }
+  to { transform: translate(6%, -4%); }
 }
 @media (prefers-reduced-motion: reduce) {
   .gradient-mesh,
@@ -387,11 +391,17 @@
   inset: -10%;
   z-index: 9997;
   pointer-events: none;
-  opacity: 0.05;
-  mix-blend-mode: overlay;
+  /* A faint static grain, composited on its own layer. Deliberately NOT using
+     mix-blend-mode here: an animated, full-viewport blended layer forces the
+     browser to re-composite the entire page underneath it on every frame,
+     which is a major scroll-jank source. A plain low-opacity overlay reads
+     almost identically at this strength for a fraction of the cost. The
+     transform animation is compositor-only (no repaint) and cheap. */
+  opacity: 0.045;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 180px 180px;
-  animation: grainShift 1s steps(6) infinite;
+  animation: grainShift 1.2s steps(6) infinite;
+  will-change: transform;
 }
 @keyframes grainShift {
   0% { transform: translate(0, 0); }

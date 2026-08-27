@@ -15,6 +15,11 @@ export function registerGSAP() {
   if (registered || typeof window === "undefined") return;
   gsap.registerPlugin(ScrollTrigger, SplitText);
   gsap.defaults({ ease: "power3.out" });
+  // On mobile the address bar collapsing/expanding fires resize events that
+  // make ScrollTrigger recalculate start/end positions mid-scroll — a common
+  // source of visible stutter. Ignoring those resizes keeps scroll-linked
+  // motion steady while the viewport height flickers.
+  ScrollTrigger.config({ ignoreMobileResize: true });
   registered = true;
 }
 

@@ -13,6 +13,7 @@ import { service } from "@/constants/routes";
  * per-service `videoSrc` in data/services.ts still overrides its slot.
  */
 const BRANDING_VIDEOS = ["/Branding-1.mp4", "/Branding-2.mp4", "/Branding-3.mp4"];
+const BRANDING_POSTERS = ["/Branding-1-poster.jpg", "/Branding-2-poster.jpg", "/Branding-3-poster.jpg"];
 
 /**
  * kota.co.uk's "OUR SERVICES" treatment: a giant intro panel pins to the top,
@@ -91,6 +92,7 @@ export function ServicesShowcase() {
             {/* Right — media (drop a `videoSrc` into data/services.ts to fill) */}
             <VideoReveal
               src={s.videoSrc ?? BRANDING_VIDEOS[i % BRANDING_VIDEOS.length]}
+              poster={s.videoSrc ? undefined : BRANDING_POSTERS[i % BRANDING_POSTERS.length]}
               alt={`${s.cardTitle} showcase`}
               placeholderVariant="ink"
               className="corner-card-lg w-full aspect-[4/3] lg:aspect-auto lg:h-[560px]"
