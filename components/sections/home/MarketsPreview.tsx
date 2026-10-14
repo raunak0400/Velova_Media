@@ -25,7 +25,7 @@ export function MarketsPreview() {
           href={ROUTES.markets}
           data-cursor="hover"
           data-reveal-item
-          className="inline-flex items-center gap-2 text-sm font-semibold text-accent-text shrink-0"
+          className="inline-flex items-center gap-2 py-2.5 text-sm font-semibold text-accent-text shrink-0"
         >
           Explore every market
           <ArrowUpRight size={16} />

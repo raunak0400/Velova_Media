@@ -34,11 +34,11 @@ export function ServicesShowcase() {
   return (
     <section id="services" className="relative bg-bg">
       {/* Intro — "OUR SERVICES" */}
-      <div data-mode="light" className="lg:sticky lg:top-0 h-screen overflow-hidden bg-bg flex items-center">
+      <div data-mode="light" className="lg:sticky lg:top-0 py-20 lg:py-0 lg:h-screen overflow-hidden bg-bg flex items-center">
         <GradientMesh />
-        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-5 md:px-8 lg:px-16">
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-edge md:px-8 lg:px-16">
           <div className="relative">
-            <h2 className="heading-giant text-text" style={{ fontSize: "clamp(3.5rem, 13vw, 12rem)" }}>
+            <h2 className="heading-giant text-text text-[clamp(2.75rem,13vw,12rem)] md:text-[clamp(3.5rem,13vw,12rem)]">
               <span className="block">Our</span>
               <span className="block pl-[0.5em]">Services</span>
             </h2>
@@ -58,7 +58,7 @@ export function ServicesShowcase() {
           data-mode="light"
           className="lg:sticky lg:top-0 lg:min-h-screen overflow-hidden bg-bg rounded-t-[2rem] md:rounded-t-[3rem] border-t border-border shadow-[0_-24px_60px_-30px_rgba(0,0,0,0.28)] flex items-center"
         >
-          <div className="mx-auto w-full max-w-[1440px] px-5 md:px-8 lg:px-16 py-16 lg:py-20 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          <div className="mx-auto w-full max-w-[1440px] px-edge md:px-8 lg:px-16 py-16 lg:py-20 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             {/* Left — copy */}
             <div>
               <h3 className="font-display font-medium text-text tracking-[-0.02em] leading-[0.98] text-[clamp(2.5rem,5.5vw,5rem)] mb-8">

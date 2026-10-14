@@ -22,7 +22,7 @@ export function LatestArticles() {
 
   return (
     <section data-mode="dark" className="relative bg-bg text-text py-20 md:py-32 border-b border-border">
-      <div className="mx-auto max-w-[1440px] px-5 md:px-8 lg:px-16">
+      <div className="mx-auto max-w-[1440px] px-edge md:px-8 lg:px-16">
         <div ref={headerRef} className="flex flex-wrap items-end justify-between gap-6 mb-14">
           <div data-reveal-item className="max-w-2xl">
             <p className="eyebrow mb-4">From The Blog</p>

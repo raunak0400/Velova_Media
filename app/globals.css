@@ -54,6 +54,24 @@
   --velova-on-brand: #ffffff;
 }
 
+/* ==========================================================
+   Mobile layout system — one fluid edge-padding value and a
+   named vertical-rhythm scale, so mobile spacing stays a
+   deliberate system instead of per-section pixel guessing.
+   Desktop keeps its existing md:/lg: px-8/px-16 overrides
+   untouched; this only replaces the bare (sub-768px) value.
+   ========================================================== */
+:root {
+  --edge-pad: clamp(1rem, 5vw, 1.5rem);
+  --space-card-gap: clamp(0.875rem, 2.5vw, 1.25rem);
+  --space-stack-gap: clamp(1.5rem, 5vw, 2rem);
+  --space-section-gap: clamp(3.5rem, 11vw, 5rem);
+}
+
+@utility px-edge {
+  padding-inline: var(--edge-pad);
+}
+
 @theme inline {
   --color-bg: var(--velova-bg);
   --color-surface: var(--velova-surface);
@@ -358,6 +376,52 @@
     animation: none;
   }
 }
+
+/* ==========================================================
+   Vivid mesh — kota.co.uk's hero reference runs a much more
+   saturated, higher-contrast diagonal wash than the default calm
+   mesh used elsewhere (services/process/etc). Mobile-only override
+   (the hero's own mobile composition is the one place asking for
+   that punchier look); desktop and every other section keep the
+   default .gradient-mesh look untouched.
+   ========================================================== */
+@media (max-width: 767px) {
+  .gradient-mesh--vivid .gradient-mesh__blob {
+    filter: blur(44px);
+    opacity: 0.85;
+  }
+  .gradient-mesh--vivid .gradient-mesh__blob--a {
+    background: radial-gradient(circle, #ffd9a6 0%, transparent 72%);
+    top: -28%;
+    left: -22%;
+  }
+  .gradient-mesh--vivid .gradient-mesh__blob--b {
+    background: radial-gradient(circle, #4fc3e8 0%, transparent 72%);
+    opacity: 0.8;
+    top: -10%;
+    right: -30%;
+  }
+  .gradient-mesh--vivid .gradient-mesh__blob--c {
+    background: radial-gradient(circle, #ff34f3 0%, transparent 68%);
+    opacity: 0.85;
+    width: 74vw;
+    height: 74vw;
+    bottom: -18%;
+    right: -20%;
+  }
+  .gradient-mesh--vivid .gradient-mesh__blob--d {
+    background: radial-gradient(circle, #8a3ce8 0%, transparent 70%);
+    opacity: 0.6;
+    bottom: -20%;
+    left: -10%;
+  }
+}
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  .gradient-mesh--vivid .gradient-mesh__blob {
+    animation: none;
+  }
+}
+
 /* ==========================================================
    Fluid background — WebGL shader-driven replacement for the gradient
    mesh blobs above. Same position/inset contract so it's a drop-in

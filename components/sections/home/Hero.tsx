@@ -31,15 +31,15 @@ export function Hero() {
   const featuredCase = CASE_STUDIES[1];
 
   return (
-    <section data-mode="light" className="relative h-screen flex flex-col overflow-hidden">
-      <div className="relative z-10 flex-1 flex items-center mx-auto max-w-[1600px] w-full px-5 md:px-8 lg:px-16 pt-16">
+    <section data-mode="light" className="relative min-h-[100svh] h-auto md:h-screen flex flex-col md:overflow-hidden">
+      <div className="relative z-10 flex-1 flex items-center mx-auto max-w-[1600px] w-full px-edge md:px-8 lg:px-16 pt-16">
         <div className="relative w-full">
           <AnimatedHeading
             as="h1"
             type="words"
             trigger="load"
             delay={0.15}
-            className="heading-hero font-bold text-text lowercase leading-[0.85] tracking-[-0.02em] text-[clamp(3rem,10.5vw,10rem)]"
+            className="heading-hero font-bold text-text lowercase leading-[0.85] tracking-[-0.02em] text-[clamp(2.75rem,11vw,10rem)] md:text-[clamp(3rem,10.5vw,10rem)]"
           >
             <span className="block">Where Brands</span>
             <span className="block -mt-[0.42em]">
@@ -70,8 +70,8 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="relative z-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4 px-5 md:px-8 lg:px-16 pb-8">
-        <div ref={platformsRef} className="flex flex-wrap items-center gap-x-5 gap-y-2">
+      <div className="relative z-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4 px-edge md:px-8 lg:px-16 pb-10 md:pb-8">
+        <div ref={platformsRef} className="hidden md:flex flex-wrap items-center gap-x-5 gap-y-2">
           {PLATFORMS.map((platform, i) => (
             <span
               key={platform}
@@ -87,20 +87,20 @@ export function Hero() {
           ))}
         </div>
 
-        <div className="max-w-md md:text-right flex flex-col md:items-end gap-6">
-          <p ref={subheadingRef} className="text-body-lg text-text-2 leading-relaxed">
+        <div className="w-full md:max-w-md md:text-right flex flex-col md:items-end gap-5 md:gap-6">
+          <p ref={subheadingRef} className="text-body md:text-body-lg text-text-2 leading-relaxed">
             From Meta Ads to Shopify to SEO — Ahmedabad&apos;s full-stack digital marketing agency delivering{" "}
             <strong className="text-text font-semibold">measurable results for ambitious brands</strong> across
             India, the UK, the USA, Canada and the Netherlands.
           </p>
-          <div ref={buttonsRef} className="flex flex-wrap items-center md:justify-end gap-4">
-            <span data-reveal-item>
-              <Button variant="primary" size="lg" href={ROUTES.contact} icon={<ArrowRight size={18} />}>
+          <div ref={buttonsRef} className="hidden sm:flex sm:flex-row sm:flex-wrap sm:w-auto items-stretch sm:items-center md:justify-end gap-3 sm:gap-4">
+            <span data-reveal-item className="w-full sm:w-auto">
+              <Button variant="primary" size="lg" href={ROUTES.contact} icon={<ArrowRight size={18} />} className="w-full sm:w-auto justify-center">
                 Get a Free Consultation
               </Button>
             </span>
-            <span data-reveal-item>
-              <Button variant="secondary" size="lg" href={ROUTES.caseStudies}>
+            <span data-reveal-item className="w-full sm:w-auto">
+              <Button variant="secondary" size="lg" href={ROUTES.caseStudies} className="w-full sm:w-auto justify-center">
                 View Our Work
               </Button>
             </span>

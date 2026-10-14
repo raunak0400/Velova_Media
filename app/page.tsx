@@ -11,7 +11,7 @@ import { PlatformsStrip } from "@/components/sections/home/PlatformsStrip";
 import { LatestArticles } from "@/components/sections/home/LatestArticles";
 import { FAQSection } from "@/components/sections/home/FAQSection";
 import { CTASection } from "@/components/sections/CTASection";
-import { GradientMesh } from "@/components/motion/GradientMesh";
+import { FluidBackground } from "@/components/motion/FluidBackground";
 import { Marquee } from "@/components/motion/Marquee";
 import { SERVICES } from "@/data/services";
 
@@ -42,7 +42,7 @@ export default function Home() {
           section boundary reads as a smooth transition, not a seam. Both
           sections are transparent; the base color + drifting mesh live here. */}
       <div className="relative overflow-hidden bg-bg">
-        <GradientMesh />
+        <FluidBackground className="gradient-mesh--vivid" />
         <Hero />
         <WhyVelova />
       </div>

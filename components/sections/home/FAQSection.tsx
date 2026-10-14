@@ -16,7 +16,7 @@ export function FAQSection() {
 
   return (
     <section data-mode="dark" className="relative bg-bg text-text py-20 md:py-32 border-b border-border">
-      <div className="mx-auto max-w-[1440px] px-5 md:px-8 lg:px-16">
+      <div className="mx-auto max-w-[1440px] px-edge md:px-8 lg:px-16">
         <div ref={headerRef} className="mb-14 max-w-3xl">
           <p data-reveal-item className="eyebrow mb-4">Questions</p>
           <AnimatedHeading as="h2" className="heading-giant text-text">

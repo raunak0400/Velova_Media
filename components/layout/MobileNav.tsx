@@ -117,7 +117,12 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
             ))}
           </motion.ul>
 
-          <motion.div variants={itemVariants} initial="hidden" animate="visible" className="px-5 pb-10">
+          <motion.div
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            className="px-5 pb-[max(2.5rem,calc(env(safe-area-inset-bottom)+1.25rem))]"
+          >
             <WhatsAppCTA message={WHATSAPP_MESSAGES.general} size="lg" className="w-full justify-center">
               Chat on WhatsApp
             </WhatsAppCTA>

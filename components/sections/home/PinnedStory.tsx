@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, registerGSAP } from "@/animations/config";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { cn } from "@/lib/utils/cn";
 
 const BEATS = [
   {
@@ -76,21 +77,24 @@ export function PinnedStory() {
     <section
       ref={containerRef}
       data-mode="dark"
-      className="relative h-screen md:h-screen flex flex-col md:block border-b border-border overflow-hidden bg-bg"
+      className="relative h-auto md:h-screen flex flex-col md:block border-b border-border bg-bg md:overflow-hidden"
     >
       <div className="relative z-10 md:absolute md:inset-0 flex items-center">
-        <div className="mx-auto max-w-[1440px] w-full px-5 md:px-8 lg:px-16 py-16 md:py-0">
-          <div className="relative max-w-3xl md:min-h-[280px] flex flex-col gap-8 md:gap-0">
+        <div className="mx-auto max-w-[1440px] w-full px-edge md:px-8 lg:px-16 py-20 md:py-0">
+          <div className="relative max-w-3xl md:min-h-[280px] flex flex-col md:gap-0">
             {BEATS.map((beat, i) => (
               <div
                 key={beat.label}
                 ref={(el) => {
                   beatRefs.current[i] = el;
                 }}
-                className="md:absolute md:inset-0 flex flex-col justify-center"
+                className={cn(
+                  "md:absolute md:inset-0 flex flex-col justify-center",
+                  i > 0 && "mt-8 pt-8 border-t border-border/60 md:mt-0 md:pt-0 md:border-t-0",
+                )}
               >
-                <p className="eyebrow mb-5">{beat.label}</p>
-                <p className="font-display text-h2 text-text leading-tight">{beat.body}</p>
+                <p className="eyebrow mb-4">{beat.label}</p>
+                <p className="font-display text-h3 md:text-h2 text-text leading-snug md:leading-tight">{beat.body}</p>
               </div>
             ))}
           </div>

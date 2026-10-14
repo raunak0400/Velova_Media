@@ -20,7 +20,7 @@ export function PlatformsStrip() {
 
   return (
     <section data-mode="dark" className="relative bg-bg text-text py-20 md:py-32 border-b border-border overflow-hidden">
-      <div className="relative mx-auto max-w-[1440px] px-5 md:px-8 lg:px-16">
+      <div className="relative mx-auto max-w-[1440px] px-edge md:px-8 lg:px-16">
         <div ref={headerRef} className="relative mb-14 max-w-3xl">
           <p data-reveal-item className="eyebrow mb-4">Platforms We Run On</p>
           <div ref={headingParallaxRef}>

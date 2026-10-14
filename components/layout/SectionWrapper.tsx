@@ -35,9 +35,9 @@ export function SectionWrapper({
       id={id}
       data-mode={mode}
       data-motion-budget={motionBudget}
-      className={cn("bg-bg text-text py-16 md:py-32 border-b border-border", className)}
+      className={cn("bg-bg text-text py-16 md:py-[10.5rem] border-b border-border", className)}
     >
-      <div className={cn(!fullBleed && "mx-auto max-w-[1440px] px-5 md:px-8 lg:px-16", innerClassName)}>
+      <div className={cn(!fullBleed && "mx-auto max-w-[1440px] px-edge md:px-8 lg:px-16", innerClassName)}>
         {children}
       </div>
     </Tag>

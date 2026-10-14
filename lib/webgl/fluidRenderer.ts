@@ -15,8 +15,8 @@ import { acquirePointerTracking, getPointerSnapshot } from "@/lib/pointerStore";
  * repeatedly (see PageTransition). A context is booted at most once per
  * page load here, never re-created on route change.
  *
- * Palette hex values match the existing .gradient-mesh CSS blobs in
- * globals.css (warm/blue/magenta/purple), plus one added cyan stop.
+ * Palette hex values are kota.co.uk's own (pulled from its public build
+ * output): cream, cyan, purple, magenta-pink, bright pink, purple again.
  */
 
 const TILE_SIZE = 512;
@@ -24,7 +24,7 @@ const MAX_SLOTS = 6;
 const IDLE_DECAY_MS = 900;
 const MOUSE_SMOOTHING = 0.08;
 
-const PALETTE_HEX = ["#f6e2c4", "#8ecbe8", "#c13fd6", "#6b46c8", "#4fd8c9"] as const;
+const PALETTE_HEX = ["#F2E6DB", "#71D9E9", "#8c3dd0", "#D03F83", "#F43FF9", "#8c3dd0"] as const;
 
 function hexToVec3(hex: string): [number, number, number] {
   const n = parseInt(hex.slice(1), 16);
@@ -32,20 +32,16 @@ function hexToVec3(hex: string): [number, number, number] {
 }
 
 const PALETTE_VEC3 = PALETTE_HEX.map(hexToVec3);
+const PALETTE_FLAT = new Float32Array(PALETTE_VEC3.flat());
 
 interface Uniforms {
   u_resolution: WebGLUniformLocation | null;
   u_time: WebGLUniformLocation | null;
   u_seed: WebGLUniformLocation | null;
-  u_mouse: WebGLUniformLocation | null;
   u_mouseVelocity: WebGLUniformLocation | null;
   u_mouseInfluence: WebGLUniformLocation | null;
   u_quality: WebGLUniformLocation | null;
-  u_paletteA: WebGLUniformLocation | null;
-  u_paletteB: WebGLUniformLocation | null;
-  u_paletteC: WebGLUniformLocation | null;
-  u_paletteD: WebGLUniformLocation | null;
-  u_paletteE: WebGLUniformLocation | null;
+  u_palette: WebGLUniformLocation | null;
 }
 
 interface RegistryEntry {
@@ -119,15 +115,10 @@ class FluidRenderer {
       u_resolution: gl.getUniformLocation(program, "u_resolution"),
       u_time: gl.getUniformLocation(program, "u_time"),
       u_seed: gl.getUniformLocation(program, "u_seed"),
-      u_mouse: gl.getUniformLocation(program, "u_mouse"),
       u_mouseVelocity: gl.getUniformLocation(program, "u_mouseVelocity"),
       u_mouseInfluence: gl.getUniformLocation(program, "u_mouseInfluence"),
       u_quality: gl.getUniformLocation(program, "u_quality"),
-      u_paletteA: gl.getUniformLocation(program, "u_paletteA"),
-      u_paletteB: gl.getUniformLocation(program, "u_paletteB"),
-      u_paletteC: gl.getUniformLocation(program, "u_paletteC"),
-      u_paletteD: gl.getUniformLocation(program, "u_paletteD"),
-      u_paletteE: gl.getUniformLocation(program, "u_paletteE"),
+      u_palette: gl.getUniformLocation(program, "u_palette"),
     };
 
     for (let i = 0; i < MAX_SLOTS; i++) this.freeSlots.push(i);
@@ -197,9 +188,17 @@ class FluidRenderer {
       release: () => {
         this.registry.delete(slot);
         this.freeSlots.push(slot);
-        if (this.registry.size === 0 && this.releasePointerTracking) {
-          this.releasePointerTracking();
-          this.releasePointerTracking = null;
+        if (this.registry.size === 0) {
+          // Cancel any RAF scheduled for the now-empty registry — otherwise a
+          // subsequent acquire() (e.g. React Strict Mode's mount → cleanup →
+          // mount) sees a stale truthy rafId in ensureLoopRunning() and skips
+          // rescheduling, leaving the new entry registered but never ticked.
+          cancelAnimationFrame(this.rafId);
+          this.rafId = 0;
+          if (this.releasePointerTracking) {
+            this.releasePointerTracking();
+            this.releasePointerTracking = null;
+          }
         }
       },
     };
@@ -248,11 +247,7 @@ class FluidRenderer {
     gl.enable(gl.SCISSOR_TEST);
     gl.uniform1f(uniforms.u_time, elapsed);
     gl.uniform1f(uniforms.u_quality, this.quality);
-    gl.uniform3fv(uniforms.u_paletteA, PALETTE_VEC3[0]);
-    gl.uniform3fv(uniforms.u_paletteB, PALETTE_VEC3[1]);
-    gl.uniform3fv(uniforms.u_paletteC, PALETTE_VEC3[2]);
-    gl.uniform3fv(uniforms.u_paletteD, PALETTE_VEC3[3]);
-    gl.uniform3fv(uniforms.u_paletteE, PALETTE_VEC3[4]);
+    gl.uniform3fv(uniforms.u_palette, PALETTE_FLAT);
 
     for (const entry of visibleEntries) {
       const x = entry.slot * TILE_SIZE;
@@ -261,7 +256,6 @@ class FluidRenderer {
 
       gl.uniform2f(uniforms.u_resolution, TILE_SIZE, TILE_SIZE);
       gl.uniform2f(uniforms.u_seed, entry.seedX, entry.seedY);
-      gl.uniform2f(uniforms.u_mouse, this.smoothedX * TILE_SIZE, (1 - this.smoothedY) * TILE_SIZE);
       gl.uniform2f(uniforms.u_mouseVelocity, velX * TILE_SIZE, -velY * TILE_SIZE);
       gl.uniform1f(uniforms.u_mouseInfluence, influence);
 

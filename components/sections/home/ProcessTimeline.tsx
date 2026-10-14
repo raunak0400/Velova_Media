@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
-import { Play } from "lucide-react";
+import { ChevronDown, Play } from "lucide-react";
 import { gsap, registerGSAP } from "@/animations/config";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { GradientMesh } from "@/components/motion/GradientMesh";
@@ -109,48 +109,57 @@ export function ProcessTimeline() {
             ))}
           </div>
 
-          <div className="relative flex flex-col gap-6 motion-safe:lg:block motion-safe:lg:h-[62vh] motion-safe:lg:max-h-[600px] motion-safe:lg:gap-0 motion-safe:lg:overflow-hidden">
+          <div className="relative flex flex-col gap-4 motion-safe:lg:block motion-safe:lg:h-[62vh] motion-safe:lg:max-h-[600px] motion-safe:lg:gap-0 motion-safe:lg:overflow-hidden">
             {PROCESS_STEPS.map((step, i) => (
-              <div
-                key={step.index}
-                ref={(el) => {
-                  cardRefs.current[i] = el;
-                }}
-                className="relative motion-safe:lg:absolute motion-safe:lg:inset-0"
-              >
-                <div className="corner-card-lg grid h-full grid-cols-1 overflow-hidden border border-border bg-surface lg:grid-cols-[1.05fr_0.95fr]">
-                  {/* Media — drop a `videoSrc` into data/process.ts to fill */}
-                  <div className="relative min-h-[240px] overflow-hidden bg-[#141414] lg:min-h-0">
-                    {step.videoSrc ? (
-                      <video
-                        className="absolute inset-0 h-full w-full object-cover"
-                        src={step.videoSrc}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        preload="metadata"
-                        aria-label={`${step.title} showcase`}
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center" role="img" aria-label={`${step.title} showcase`}>
-                        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm">
-                          <Play className="ml-0.5 h-6 w-6" fill="currentColor" strokeWidth={0} aria-hidden="true" />
-                        </span>
-                      </div>
-                    )}
+              <Fragment key={step.index}>
+                {i > 0 && (
+                  <div aria-hidden="true" className="flex lg:hidden flex-col items-center justify-center gap-1 -my-1">
+                    <span className="h-5 w-px shrink-0 bg-border" />
+                    <ChevronDown size={16} strokeWidth={2} className="text-accent-text shrink-0" />
                   </div>
+                )}
+                <div
+                  ref={(el) => {
+                    cardRefs.current[i] = el;
+                  }}
+                  className="relative motion-safe:lg:absolute motion-safe:lg:inset-0"
+                >
+                  <div className="corner-card-lg grid h-full grid-cols-1 overflow-hidden border border-border bg-surface lg:grid-cols-[1.05fr_0.95fr]">
+                    {/* Media — drop a `videoSrc` into data/process.ts to fill */}
+                    <div className="relative min-h-[240px] overflow-hidden bg-[#141414] lg:min-h-0">
+                      {step.videoSrc ? (
+                        <video
+                          className="absolute inset-0 h-full w-full object-cover"
+                          src={step.videoSrc}
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          preload="metadata"
+                          aria-label={`${step.title} showcase`}
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center" role="img" aria-label={`${step.title} showcase`}>
+                          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm">
+                            <Play className="ml-0.5 h-6 w-6" fill="currentColor" strokeWidth={0} aria-hidden="true" />
+                          </span>
+                        </div>
+                      )}
+                    </div>
 
-                  {/* Copy */}
-                  <div className="flex flex-col justify-center bg-surface p-8 md:p-12">
-                    <span className="text-data font-display text-lg font-semibold text-accent-text">{step.index}</span>
-                    <h3 className="font-display font-medium text-text tracking-[-0.015em] leading-[1.0] text-[clamp(1.75rem,3vw,3rem)] mt-3 mb-5">
-                      {step.title}
-                    </h3>
-                    <p className="max-w-md text-body-lg leading-relaxed text-text-2">{step.description}</p>
+                    {/* Copy */}
+                    <div className="flex flex-col justify-center bg-surface p-8 md:p-12">
+                      <span className="text-data font-display text-[clamp(1.75rem,7vw,2.25rem)] lg:text-lg font-semibold text-accent-text">
+                        {step.index}
+                      </span>
+                      <h3 className="font-display font-medium text-text tracking-[-0.015em] leading-[1.0] text-[clamp(1.75rem,3vw,3rem)] mt-3 mb-5">
+                        {step.title}
+                      </h3>
+                      <p className="max-w-md text-body-lg leading-relaxed text-text-2">{step.description}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Fragment>
             ))}
           </div>
         </div>

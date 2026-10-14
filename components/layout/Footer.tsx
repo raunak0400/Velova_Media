@@ -39,7 +39,17 @@ export function Footer() {
     <footer data-mode="dark" className="relative bg-bg text-text overflow-hidden">
       <FooterGlow />
 
-      <div ref={revealRef} className="relative z-10 mx-auto max-w-[1440px] px-5 md:px-8 lg:px-16 py-16 md:py-24">
+      <div ref={revealRef} className="relative z-10 mx-auto max-w-[1440px] px-edge md:px-8 lg:px-16 py-16 md:py-24">
+        <div data-reveal-item className="flex sm:hidden items-center gap-2.5 mb-10">
+          <span className="grid grid-cols-2 grid-rows-2 gap-x-1 gap-y-0.5 w-11 h-11 border-2 border-white p-1.5 shrink-0">
+            <span className="flex items-center justify-center font-display text-[8px] font-bold uppercase leading-none text-white">Ve</span>
+            <span className="flex items-center justify-center font-display text-[8px] font-bold uppercase leading-none text-white">Lo</span>
+            <span className="flex items-center justify-center font-display text-[8px] font-bold uppercase leading-none text-white">Va</span>
+            <span className="flex items-center justify-center font-display text-[8px] font-bold uppercase leading-none text-white">Me</span>
+          </span>
+          <span className="font-display text-base font-bold uppercase tracking-tight text-white">{BUSINESS.name}</span>
+        </div>
+
         <div data-reveal-item className="flex flex-wrap items-center justify-between gap-4 md:gap-6 mb-16">
           <span
             className="hidden sm:grid grid-cols-2 grid-rows-2 gap-x-2 gap-y-1.5 w-24 h-24 border-[3px] border-white p-3 shrink-0"
@@ -53,7 +63,7 @@ export function Footer() {
           <a
             href={`mailto:${BUSINESS.email}`}
             data-cursor="hover"
-            className="font-display font-semibold text-text text-[clamp(1.75rem,6vw,4.5rem)] leading-none tracking-tight hover:text-accent-text transition-colors break-all text-right"
+            className="font-display font-semibold text-text text-[clamp(1.75rem,6vw,4.5rem)] leading-none tracking-tight hover:text-accent-text transition-colors break-all sm:text-right"
           >
             {BUSINESS.email}
           </a>

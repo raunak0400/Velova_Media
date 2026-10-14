@@ -17,7 +17,7 @@ export function WhyVelova() {
 
   return (
     <section data-mode="light" className="relative text-text py-16 lg:py-0 lg:min-h-screen lg:flex lg:flex-col lg:justify-center border-b border-border overflow-hidden">
-      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-5 md:px-8 lg:px-16 lg:py-12">
+      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-edge md:px-8 lg:px-16 lg:py-12">
         <div ref={headerRef} className="mb-8 md:mb-10 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-start lg:gap-12">
           <div className="lg:col-span-7">
             <p data-reveal-item className="eyebrow mb-5">Why Velova</p>
